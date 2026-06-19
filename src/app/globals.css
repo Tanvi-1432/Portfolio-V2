@@ -63,6 +63,12 @@ body {
     --case-close-pad: 96px var(--gutter) 90px;
     --case-prose-columns: 1fr;
     --case-prose-gap: 34px;
+    --case-product-columns: 1fr;
+    --case-system-grid: 1fr;
+    --case-system-visual-height: auto;
+    --case-system-visual-pad: 24px;
+    --case-system-row-offset: 0;
+    --case-system-node-pad: 0;
     --case-card-columns: 1fr;
     --case-interaction-columns: 1fr;
     --case-meta-columns: 1fr 1fr;
