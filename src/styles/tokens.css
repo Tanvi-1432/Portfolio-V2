@@ -1,0 +1,67 @@
+/* Design tokens — extracted from FOLIO prototype */
+:root {
+  /* ── Colors ──────────────────────────────────────────── */
+  --ink:          #14110E;
+  --ink-2:        #1B1714;
+  --paper:        #EFE6D8;
+  --cream:        #F1E8DC;
+  --text:         #E8DFD3;
+  --text-soft:    rgba(232, 223, 211, 0.65);
+  --text-dim:     rgba(232, 223, 211, 0.55);
+  --rule:         rgba(232, 223, 211, 0.18);
+  --ink-screen:   #0E0B0A;
+  --surface-overlay: rgba(20, 17, 14, 0.88);
+  --accent:       #C8412B;
+  --accent-soft:  rgba(200, 65, 43, 0.55);
+
+  /* ── Fonts ───────────────────────────────────────────── */
+  --font-display: "Instrument Serif", "Times New Roman", serif;
+  --font-body:    "Newsreader", "Times New Roman", serif;
+  --font-ui:      "Space Grotesk", system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  /* ── Easing ──────────────────────────────────────────── */
+  --ease-reveal:   cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-magnetic: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --ease-drawer:   cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-out:      cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-cinema:   cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-inspect:  cubic-bezier(0.18, 0.7, 0.18, 1);
+  --ease-menu:     cubic-bezier(0.7, 0, 0.2, 1);
+
+  /* ── Durations ───────────────────────────────────────── */
+  --dur-reveal:   780ms;
+  --dur-fade:     640ms;
+  --dur-page:     900ms;
+  --dur-snap:     420ms;
+  --dur-fast:     220ms;
+  --dur-inspect:  700ms;
+  --dur-micro:    260ms;
+  --dur-press:    140ms;
+  --dur-hover:    320ms;
+  --dur-medium:   420ms;
+  --dur-menu:     680ms;
+  --dur-stagger:  760ms;
+
+  /* ── Layout ──────────────────────────────────────────── */
+  --max-w:        1500px;
+  --content-w:    1400px;
+  --read-w:       1100px;
+  --gutter:       64px;
+  --gutter-sm:    22px;
+  --section-pad:  160px;
+
+  /* ── Z-index layers ──────────────────────────────────── */
+  --z-cursor:  9999;
+  --z-nav:      100;
+  --z-menu:      90;
+  --z-case:      80;
+  --z-overlay:   70;
+}
+
+@media (max-width: 760px) {
+  :root {
+    --gutter:      22px;
+    --section-pad: 96px;
+  }
+}
