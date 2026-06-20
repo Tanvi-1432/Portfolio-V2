@@ -123,7 +123,7 @@ export default function Approach({ active }: Props) {
         minHeight: "100vh",
         background: "var(--ink)",
         color: "var(--text)",
-        padding: "160px var(--gutter) 140px",
+        padding: "var(--section-pad-lg) var(--gutter) var(--section-pad-md)",
         overflow: "hidden",
       }}
     >
@@ -134,7 +134,7 @@ export default function Approach({ active }: Props) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "baseline",
-            marginBottom: 96,
+            marginBottom: "var(--section-gap-md)",
           }}
         >
           <FadeIn>

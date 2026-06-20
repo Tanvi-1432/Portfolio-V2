@@ -67,7 +67,7 @@ export default function Capabilities({ active }: Props) {
         minHeight: "100vh",
         background: "var(--ink-2)",
         color: "var(--text)",
-        padding: "160px var(--gutter) 160px",
+        padding: "var(--section-pad-lg) var(--gutter)",
         overflow: "hidden",
       }}
     >
@@ -77,9 +77,8 @@ export default function Capabilities({ active }: Props) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "baseline",
-          marginBottom: 96,
           maxWidth: "var(--max-w)",
-          margin: "0 auto 96px",
+          margin: "0 auto var(--section-gap-md)",
         }}
       >
         <FadeIn>

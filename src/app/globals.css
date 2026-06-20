@@ -48,6 +48,15 @@ body {
   display: none;
 }
 
+.case-study {
+  --case-hero-pad: var(--chrome-safe-top) var(--gutter) var(--section-pad-md);
+  --case-section-pad: var(--section-pad-md) var(--gutter);
+  --case-close-pad: var(--section-pad-md) var(--gutter) var(--section-pad-lg);
+  --case-prose-gap: 72px;
+  --case-mock-height: 600px;
+  --case-pocket-phone-card-h: 640px;
+}
+
 @media (max-width: 760px) {
   .desktop-experience {
     display: none;
@@ -59,7 +68,7 @@ body {
 
   .case-study {
     --case-hero-pad: 96px var(--gutter) 44px;
-    --case-section-pad: 86px var(--gutter);
+    --case-section-pad: var(--section-pad-md) var(--gutter);
     --case-close-pad: 96px var(--gutter) 90px;
     --case-prose-columns: 1fr;
     --case-prose-gap: 34px;
@@ -69,13 +78,29 @@ body {
     --case-system-visual-pad: 24px;
     --case-system-row-offset: 0;
     --case-system-node-pad: 0;
+    --case-pocket-state-columns: 1fr;
+    --case-pocket-state-gap: 42px;
+    --case-pocket-state-copy-top: auto;
+    --case-pocket-state-pad: 20px;
+    --case-pocket-phone-gap: 18px;
+    --case-pocket-phone-card-w: min(314px, 82vw);
+    --case-pocket-phone-card-h: 580px;
+    --case-pocket-state-detail-columns: 1fr;
+    --case-state-columns: 1fr;
+    --case-state-gap: 18px;
+    --case-state-card-pad: 24px;
+    --case-state-step-columns: 1fr;
     --case-card-columns: 1fr;
     --case-interaction-columns: 1fr;
+    --case-interaction-detail-columns: 1fr;
+    --case-interaction-panel-height: auto;
+    --case-interaction-visual-height: auto;
+    --case-interaction-visual-pad: 24px;
     --case-meta-columns: 1fr 1fr;
     --case-meta-gap: 24px;
     --case-metric-columns: 1fr 1fr;
     --case-close-columns: 1fr;
-    --case-mock-height: 520px;
+    --case-mock-height: 500px;
   }
 }
 
@@ -83,7 +108,9 @@ body {
   .case-study {
     --case-meta-columns: 1fr;
     --case-metric-columns: 1fr;
-    --case-mock-height: 460px;
+    --case-mock-height: 440px;
+    --case-pocket-phone-card-w: min(292px, 84vw);
+    --case-pocket-phone-card-h: 560px;
   }
 }
 

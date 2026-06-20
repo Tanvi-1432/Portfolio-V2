@@ -10,9 +10,9 @@ import { gsap } from "@/lib/gsap";
 
 // ── Scramble config (exact from prototype) ───────────────────────────────────
 const SCR = {
-  PER: 155,
-  SCRAMBLE: 580,
-  BASE: 360,
+  PER: 118,
+  SCRAMBLE: 420,
+  BASE: 180,
   CHURN: 55,
   GLYPHS: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz/\\<>{}[]#*+=01",
 };
@@ -143,14 +143,14 @@ function ScrambleWord({
             display: "inline-block",
             minWidth: "0.52em",
             textAlign: "center",
-            opacity: 0,
+            opacity: 0.28,
             color:
               accentTail && i === chars.length - 1
                 ? "var(--accent)"
                 : "rgba(232,223,211,0.72)",
           }}
         >
-          {" "}
+          {chars[i]}
         </span>
       ))}
     </span>
@@ -170,7 +170,7 @@ export default function Hero({ onJump }: Props) {
   const prefersReduced = usePrefersReducedMotion();
 
   useEffect(() => {
-    const t = setTimeout(() => setRevealed(true), 180);
+    const t = setTimeout(() => setRevealed(true), 60);
     return () => clearTimeout(t);
   }, []);
 
@@ -210,7 +210,7 @@ export default function Hero({ onJump }: Props) {
         background: "var(--ink)",
         color: "var(--cream)",
         overflow: "hidden",
-        padding: "120px var(--gutter) 96px",
+        padding: "var(--chrome-safe-top) var(--gutter) var(--chrome-safe-bottom)",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",

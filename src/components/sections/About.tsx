@@ -20,7 +20,7 @@ export default function About({ active }: Props) {
         minHeight: "100vh",
         background: "linear-gradient(to bottom, var(--ink) 0%, #1C1610 120px, #1A1510 100%)",
         color: "var(--cream)",
-        padding: "160px var(--gutter) 140px",
+        padding: "var(--section-pad-lg) var(--gutter) var(--section-pad-md)",
         overflow: "hidden",
       }}
     >
@@ -51,7 +51,7 @@ export default function About({ active }: Props) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "baseline",
-            marginBottom: 80,
+            marginBottom: 64,
             paddingBottom: 18,
             borderBottom: "1px solid var(--rule)",
           }}
@@ -69,8 +69,8 @@ export default function About({ active }: Props) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1.2fr",
-            gap: 80,
+            gridTemplateColumns: "0.92fr 1.08fr",
+            gap: 72,
             alignItems: "start",
           }}
         >
@@ -80,14 +80,14 @@ export default function About({ active }: Props) {
               <div
                 style={{
                   width: "100%",
-                  aspectRatio: "4 / 5",
+                  aspectRatio: "4 / 4.55",
                   background:
                     "linear-gradient(160deg, rgba(232,223,211,0.08), rgba(200,65,43,0.10) 42%, rgba(20,17,14,0.92))",
                   border: "1px solid var(--rule)",
                   position: "relative",
                   overflow: "hidden",
-                  boxShadow: "0 30px 80px rgba(0,0,0,0.45)",
-                  padding: 28,
+                  boxShadow: "0 24px 64px rgba(0,0,0,0.38)",
+                  padding: 24,
                 }}
               >
                 <div
@@ -105,7 +105,7 @@ export default function About({ active }: Props) {
 
                 <div
                   style={{
-                    marginTop: 34,
+                    marginTop: 26,
                     display: "grid",
                     gridTemplateColumns: "1fr",
                     gap: 14,
@@ -166,9 +166,9 @@ export default function About({ active }: Props) {
                 <div
                   style={{
                     position: "absolute",
-                    left: 28,
-                    right: 28,
-                    bottom: 28,
+                    left: 24,
+                    right: 24,
+                    bottom: 24,
                     display: "grid",
                     gridTemplateColumns: "repeat(3, 1fr)",
                     gap: 1,
@@ -185,7 +185,7 @@ export default function About({ active }: Props) {
                       key={label}
                       style={{
                         background: "var(--surface-overlay)",
-                        padding: "18px 14px",
+                        padding: "15px 12px",
                       }}
                     >
                       <div

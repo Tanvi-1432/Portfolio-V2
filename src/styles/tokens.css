@@ -50,6 +50,14 @@
   --gutter:       64px;
   --gutter-sm:    22px;
   --section-pad:  160px;
+  --section-pad-xl: 160px;
+  --section-pad-lg: 136px;
+  --section-pad-md: 112px;
+  --section-pad-sm: 88px;
+  --section-gap-lg: 128px;
+  --section-gap-md: 88px;
+  --chrome-safe-top: 104px;
+  --chrome-safe-bottom: 88px;
 
   /* ── Z-index layers ──────────────────────────────────── */
   --z-cursor:  9999;
@@ -63,5 +71,13 @@
   :root {
     --gutter:      22px;
     --section-pad: 96px;
+    --section-pad-xl: 112px;
+    --section-pad-lg: 104px;
+    --section-pad-md: 88px;
+    --section-pad-sm: 72px;
+    --section-gap-lg: 76px;
+    --section-gap-md: 52px;
+    --chrome-safe-top: 88px;
+    --chrome-safe-bottom: 72px;
   }
 }

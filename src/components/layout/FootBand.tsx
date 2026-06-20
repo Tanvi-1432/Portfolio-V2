@@ -11,6 +11,7 @@ export default function FootBand({ currentScene }: Props) {
   const section = navSections.find((s) => s.id === currentScene);
   const idx = section?.idx ?? "—";
   const label = section?.label ?? "";
+  const muted = currentScene === "works";
 
   return (
     <div
@@ -27,6 +28,10 @@ export default function FootBand({ currentScene }: Props) {
         zIndex: "var(--z-nav)",
         pointerEvents: "none",
         mixBlendMode: "difference",
+        opacity: muted ? 0 : 1,
+        transform: muted ? "translateY(12px)" : "translateY(0)",
+        transition:
+          "opacity var(--dur-medium) ease, transform var(--dur-medium) var(--ease-reveal)",
       }}
     >
       <SmallCap style={{ color: "var(--text-soft)" }}>

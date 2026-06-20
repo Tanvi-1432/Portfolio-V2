@@ -11,6 +11,7 @@ import TechChips from "@/components/ui/TechChips";
 import Metric from "@/components/ui/Metric";
 import MagneticButton from "@/components/ui/MagneticButton";
 import ProjectHeroMock from "@/components/mockups/ProjectHeroMock";
+import PocketPlanPhone from "@/components/mockups/PocketPlanPhone";
 
 interface ProductStage {
   label: string;
@@ -26,6 +27,24 @@ interface ProductChapterConfig {
   systemLabel: string;
   stages: ProductStage[];
   artifacts: string[];
+}
+
+interface InteractionStepConfig {
+  label: string;
+  title: string;
+  system: string;
+  signal: string;
+  feedback: string;
+}
+
+interface InteractionModelConfig {
+  eyebrow: string;
+  title: string;
+  body: string;
+  resultLabel: string;
+  resultValue: string;
+  laneLabels: string[];
+  steps: InteractionStepConfig[];
 }
 
 const PRODUCT_CHAPTERS: Record<string, ProductChapterConfig> = {
@@ -123,6 +142,135 @@ const PRODUCT_CHAPTERS: Record<string, ProductChapterConfig> = {
     artifacts: ["Schema contract", "Inline errors", "Focus handoff"],
   },
 };
+
+const INTERACTION_MODELS: Record<string, InteractionModelConfig> = {
+  pocketplan: {
+    eyebrow: "Finance intelligence",
+    title: "Every calm screen is backed by a computed answer.",
+    body:
+      "The interaction model is not just dashboard motion. User actions expose a chain of typed calculations, confidence signals, and UI emphasis rules.",
+    resultLabel: "Surface",
+    resultValue: "one financial recommendation",
+    laneLabels: ["User asks", "Model computes", "Interface responds"],
+    steps: [
+      {
+        label: "01 Health",
+        title: "Financial health score",
+        system: "5-factor weighting",
+        signal: "savings + budget adherence + emergency buffer",
+        feedback: "Score, risk tone, and priority copy update together.",
+      },
+      {
+        label: "02 Forecast",
+        title: "Cash-flow forecast",
+        system: "safe-to-spend projection",
+        signal: "known income, upcoming bills, current burn rate",
+        feedback: "The chart, daily allowance, and warning state share one source.",
+      },
+      {
+        label: "03 Recurring",
+        title: "Subscription detection",
+        system: "merchant normalization",
+        signal: "monthly cadence, fuzzy merchant names, duplicates",
+        feedback: "Recurring charges surface without asking for manual tagging.",
+      },
+    ],
+  },
+  notes: {
+    eyebrow: "Local-first interaction",
+    title: "Small gestures become durable browser state.",
+    body:
+      "The board should feel playful, but the case needs to reveal the machinery that turns writing, searching, and clipping into predictable product behavior.",
+    resultLabel: "Surface",
+    resultValue: "a private, searchable workspace",
+    laneLabels: ["Gesture", "Reducer action", "Persistent result"],
+    steps: [
+      {
+        label: "01 Extract",
+        title: "Task extraction",
+        system: "TipTap document parser",
+        signal: "checkbox nodes, due dates, archived status",
+        feedback: "A free-form note becomes task progress on the card.",
+      },
+      {
+        label: "02 Retrieve",
+        title: "Ranked search",
+        system: "weighted local index",
+        signal: "title, tags, body, tasks, clip metadata",
+        feedback: "Search feels instant while still respecting the note structure.",
+      },
+      {
+        label: "03 Clip",
+        title: "Web clipping",
+        system: "metadata fallback path",
+        signal: "URL, title, domain, Open Graph response",
+        feedback: "The app enriches links when possible and degrades cleanly.",
+      },
+    ],
+  },
+  "little-lemon": {
+    eyebrow: "Reservation behavior",
+    title: "A small form can still prove product discipline.",
+    body:
+      "The experience is strongest when each interaction has a visible contract: typed input, helpful validation, optimistic feedback, and accessible closure.",
+    resultLabel: "Surface",
+    resultValue: "one confident booking path",
+    laneLabels: ["Customer action", "Validation contract", "Booking response"],
+    steps: [
+      {
+        label: "01 Validate",
+        title: "Inline validation",
+        system: "Zod schema",
+        signal: "blurred field, invalid shape, helper text",
+        feedback: "Errors appear near the cause instead of after the task fails.",
+      },
+      {
+        label: "02 Confirm",
+        title: "Optimistic confirm",
+        system: "submit state machine",
+        signal: "pending request, success state, rollback path",
+        feedback: "The booking feels fast without pretending failure cannot happen.",
+      },
+      {
+        label: "03 Focus",
+        title: "Focus choreography",
+        system: "keyboard route",
+        signal: "field order, error target, confirmation handoff",
+        feedback: "Keyboard and screen-reader users land in the right place.",
+      },
+    ],
+  },
+};
+
+const POCKETPLAN_PRODUCT_STATES = [
+  {
+    label: "01 Balance",
+    screen: "balance" as const,
+    title: "Start with the answer, not the ledger.",
+    body:
+      "The first state compresses the user's financial reality into a balance, daily movement, upcoming bills, and a visible trend. It gives a calm read before asking the user to inspect detail.",
+    stat: "$4,210.06",
+    signal: "balance + upcoming obligations",
+  },
+  {
+    label: "02 Budget",
+    screen: "budget" as const,
+    title: "Turn categories into decisions.",
+    body:
+      "Budget progress is treated as a decision surface: categories, remaining room, and safe pacing are visible without making the user decode a spreadsheet.",
+    stat: "74%",
+    signal: "category usage + goal pressure",
+  },
+  {
+    label: "03 Forecast",
+    screen: "forecast" as const,
+    title: "Forecast the next move before it hurts.",
+    body:
+      "The forecast state links the analytics engine to a human next step: safe-to-spend, recurring charges, and near-term risk become visible before the month gets away.",
+    stat: "$86/day",
+    signal: "projected cash flow",
+  },
+];
 
 interface Props {
   projectId: string;
@@ -298,7 +446,7 @@ function CardGrid({
             display: "flex",
             justifyContent: "space-between",
             alignItems: "baseline",
-            marginBottom: 64,
+            marginBottom: 56,
           }}
         >
           <FadeIn y={12}>
@@ -650,7 +798,7 @@ function ProductSystemChapter({ projectId }: { projectId: string }) {
             </div>
             <h2
               style={{
-                margin: "34px 0 0",
+                margin: "28px 0 0",
                 fontFamily: "var(--font-display)",
                 fontWeight: 400,
                 fontSize: "clamp(38px, 5vw, 78px)",
@@ -670,7 +818,7 @@ function ProductSystemChapter({ projectId }: { projectId: string }) {
             delay={180}
             y={22}
             style={{
-              margin: "30px 0 0",
+              margin: "26px 0 0",
               fontFamily: "var(--font-body)",
               fontSize: 18,
               lineHeight: 1.65,
@@ -681,7 +829,7 @@ function ProductSystemChapter({ projectId }: { projectId: string }) {
             {config.body}
           </FadeIn>
 
-          <div style={{ display: "grid", gap: 1, marginTop: 42 }}>
+          <div style={{ display: "grid", gap: 1, marginTop: 36 }}>
             {config.stages.map((stage, i) => {
               const selected = i === activeIndex;
               return (
@@ -770,20 +918,610 @@ function ProductSystemChapter({ projectId }: { projectId: string }) {
   );
 }
 
+function PocketPlanStateShowcase() {
+  const [ref, revealed] = useRevealOnce<HTMLElement>();
+  const railRef = useRef<HTMLDivElement | null>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = POCKETPLAN_PRODUCT_STATES[activeIndex];
+
+  const selectState = (index: number) => {
+    setActiveIndex(index);
+    cardRefs.current[index]?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "center",
+    });
+  };
+
+  const handleRailScroll = () => {
+    const rail = railRef.current;
+    if (!rail) return;
+
+    const railCenter = rail.getBoundingClientRect().left + rail.clientWidth / 2;
+    let nextIndex = activeIndex;
+    let minDistance = Number.POSITIVE_INFINITY;
+
+    cardRefs.current.forEach((card, index) => {
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      const cardCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(cardCenter - railCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        nextIndex = index;
+      }
+    });
+
+    if (nextIndex !== activeIndex) setActiveIndex(nextIndex);
+  };
+
+  return (
+    <section
+      ref={ref}
+      className="case-section case-chapter"
+      data-reveal-state={revealed ? "in" : "out"}
+      style={{
+        position: "relative",
+        zIndex: 2,
+        padding: "var(--case-section-pad, 120px var(--gutter))",
+        borderTop: "1px solid var(--rule)",
+        background:
+          "linear-gradient(180deg, var(--ink), rgba(27,23,20,0.72) 52%, var(--ink))",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "var(--max-w)",
+          margin: "0 auto",
+          display: "grid",
+          gridTemplateColumns:
+            "var(--case-pocket-state-columns, minmax(280px, 0.72fr) minmax(0, 1.28fr))",
+          gap: "var(--case-pocket-state-gap, 76px)",
+          alignItems: "start",
+        }}
+      >
+        <div
+          style={{
+            position: "sticky",
+            top: "var(--case-pocket-state-copy-top, 116px)",
+          }}
+        >
+          <FadeIn y={12}>
+            <SmallCap style={{ color: "var(--text-dim)" }}>
+              ii. Product states
+            </SmallCap>
+            <div style={{ marginTop: 22 }}>
+              <FolioNumber size={44}>02</FolioNumber>
+            </div>
+            <h2
+              style={{
+                margin: "28px 0 0",
+                fontFamily: "var(--font-display)",
+                fontWeight: 400,
+                fontSize: "clamp(38px, 5vw, 76px)",
+                lineHeight: 0.98,
+                color: "var(--cream)",
+              }}
+            >
+              Three screens, one financial answer.
+            </h2>
+          </FadeIn>
+
+          <FadeIn
+            as="p"
+            delay={140}
+            y={18}
+            style={{
+              margin: "26px 0 0",
+              fontFamily: "var(--font-body)",
+              fontSize: 18,
+              lineHeight: 1.65,
+              color: "var(--text-soft)",
+              maxWidth: 520,
+            }}
+          >
+            PocketPlan should feel calm because each screen is doing a distinct
+            job: read the current state, understand the budget pressure, then
+            forecast the next decision.
+          </FadeIn>
+
+          <div
+            role="list"
+            aria-label="PocketPlan product states"
+            style={{
+              display: "grid",
+              gap: 1,
+              marginTop: 36,
+              maxWidth: 520,
+            }}
+          >
+            {POCKETPLAN_PRODUCT_STATES.map((state, index) => {
+              const selected = index === activeIndex;
+
+              return (
+                <FadeIn key={state.label} delay={220 + index * 70} y={14}>
+                  <div role="listitem">
+                    <button
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => selectState(index)}
+                      className="motion-inspect"
+                      data-cursor-label="view"
+                      style={{
+                        width: "100%",
+                        display: "grid",
+                        gridTemplateColumns: "92px 1fr auto",
+                        gap: 18,
+                        alignItems: "center",
+                        textAlign: "left",
+                        border: "1px solid var(--rule)",
+                        background: selected
+                          ? "rgba(232,223,211,0.065)"
+                          : "rgba(232,223,211,0.018)",
+                        color: selected ? "var(--cream)" : "var(--text-soft)",
+                        padding: "18px",
+                        transition:
+                          "background var(--dur-micro) ease, color var(--dur-micro) ease",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 11,
+                          color: selected ? "var(--accent)" : "var(--text-dim)",
+                        }}
+                      >
+                        {state.label}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "var(--font-ui)",
+                          fontSize: 12,
+                          letterSpacing: "0.13em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        {state.signal}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        style={{
+                          color: selected ? "var(--accent)" : "var(--text-dim)",
+                        }}
+                      >
+                        →
+                      </span>
+                    </button>
+                  </div>
+                </FadeIn>
+              );
+            })}
+          </div>
+        </div>
+
+        <FadeIn delay={180} y={28}>
+          <div
+            style={{
+              border: "1px solid var(--rule)",
+              background:
+                "linear-gradient(145deg, rgba(200,65,43,0.10), rgba(15,13,11,0.94))",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 18,
+                alignItems: "center",
+                padding: "22px var(--case-pocket-state-pad, 30px)",
+                borderBottom: "1px solid var(--rule)",
+              }}
+            >
+              <SmallCap color="var(--accent)">{active.label}</SmallCap>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 11,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--text-dim)",
+                }}
+              >
+                swipe / inspect
+              </span>
+            </div>
+
+            <div
+              ref={railRef}
+              onScroll={handleRailScroll}
+              data-lenis-prevent
+              style={{
+                display: "flex",
+                gap: "var(--case-pocket-phone-gap, 28px)",
+                overflowX: "auto",
+                scrollSnapType: "x mandatory",
+                scrollPaddingInline: "var(--case-pocket-state-pad, 30px)",
+                padding:
+                  "28px var(--case-pocket-state-pad, 30px) 28px",
+                scrollbarWidth: "none",
+              }}
+            >
+              {POCKETPLAN_PRODUCT_STATES.map((state, index) => (
+                <div
+                  key={state.screen}
+                  ref={(node) => {
+                    cardRefs.current[index] = node;
+                  }}
+                  style={{
+                    position: "relative",
+                    flex: "0 0 var(--case-pocket-phone-card-w, min(360px, 76vw))",
+                    height: "var(--case-pocket-phone-card-h, 680px)",
+                    scrollSnapAlign: "center",
+                    border: "1px solid var(--rule)",
+                    background:
+                      index === activeIndex
+                        ? "rgba(232,223,211,0.055)"
+                        : "rgba(232,223,211,0.022)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <PocketPlanPhone screen={state.screen} />
+                </div>
+              ))}
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "var(--case-pocket-state-detail-columns, 0.42fr 1fr)",
+                gap: 1,
+                background: "var(--rule)",
+                borderTop: "1px solid var(--rule)",
+              }}
+            >
+              <div
+                style={{
+                  background: "var(--ink)",
+                  padding: "28px",
+                }}
+              >
+                <SmallCap color="var(--text-dim)">Live read</SmallCap>
+                <div
+                  style={{
+                    marginTop: 18,
+                    fontFamily: "var(--font-display)",
+                    fontStyle: "italic",
+                    fontWeight: 400,
+                    fontSize: "clamp(42px, 6vw, 74px)",
+                    lineHeight: 0.92,
+                    color: "var(--cream)",
+                  }}
+                >
+                  {active.stat}
+                </div>
+              </div>
+              <div
+                style={{
+                  background: "var(--ink)",
+                  padding: "28px",
+                }}
+              >
+                <h3
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-display)",
+                    fontStyle: "italic",
+                    fontWeight: 400,
+                    fontSize: "clamp(30px, 4vw, 46px)",
+                    lineHeight: 1.02,
+                    color: "var(--cream)",
+                  }}
+                >
+                  {active.title}
+                </h3>
+                <p
+                  style={{
+                    margin: "18px 0 0",
+                    fontFamily: "var(--font-body)",
+                    fontSize: 17,
+                    lineHeight: 1.6,
+                    color: "var(--text-soft)",
+                    maxWidth: 620,
+                  }}
+                >
+                  {active.body}
+                </p>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
+function InteractionStateVisual({
+  projectId,
+  config,
+  activeIndex,
+}: {
+  projectId: string;
+  config: InteractionModelConfig;
+  activeIndex: number;
+}) {
+  const active = config.steps[activeIndex];
+  const accent =
+    projectId === "little-lemon" ? "rgba(217,164,82,0.74)" : "var(--accent)";
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        minHeight: "var(--case-interaction-visual-height, 520px)",
+        border: "1px solid var(--rule)",
+        background:
+          projectId === "little-lemon"
+            ? "linear-gradient(145deg, rgba(217,164,82,0.08), rgba(20,17,14,0.94))"
+            : "linear-gradient(145deg, rgba(200,65,43,0.10), rgba(20,17,14,0.94))",
+        padding: "var(--case-interaction-visual-pad, 34px)",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          position: "absolute",
+          inset: "-28% auto auto 38%",
+          width: "70%",
+          height: "70%",
+          background:
+            projectId === "little-lemon"
+              ? "radial-gradient(circle, rgba(217,164,82,0.14), transparent 62%)"
+              : "radial-gradient(circle, rgba(200,65,43,0.16), transparent 62%)",
+          filter: "blur(12px)",
+          opacity: 0.9,
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: 18,
+            alignItems: "center",
+            marginBottom: 34,
+          }}
+        >
+          <SmallCap color="var(--accent)">{config.eyebrow}</SmallCap>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 11,
+              color: "var(--text-dim)",
+            }}
+          >
+            active / 0{activeIndex + 1}
+          </span>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "var(--case-state-columns, 1fr 1.15fr)",
+            gap: "var(--case-state-gap, 28px)",
+            alignItems: "stretch",
+          }}
+        >
+          <div style={{ display: "grid", gap: 1, background: "var(--rule)" }}>
+            {config.laneLabels.map((lane, i) => (
+              <div
+                key={lane}
+                style={{
+                  background: "rgba(15,13,11,0.92)",
+                  padding: "22px 20px",
+                  display: "grid",
+                  gap: 14,
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 10,
+                    color: i === activeIndex ? accent : "var(--text-dim)",
+                  }}
+                >
+                  0{i + 1}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-ui)",
+                    fontSize: 11,
+                    letterSpacing: "0.14em",
+                    textTransform: "uppercase",
+                    color: "var(--text-soft)",
+                  }}
+                >
+                  {lane}
+                </span>
+                <div
+                  style={{
+                    height: 1,
+                    background:
+                      i <= activeIndex
+                        ? `linear-gradient(90deg, ${accent}, transparent)`
+                        : "var(--rule)",
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div
+            style={{
+              border: "1px solid var(--rule)",
+              background: "rgba(232,223,211,0.035)",
+              padding: "var(--case-state-card-pad, 30px)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              minHeight: 310,
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: 18,
+                  marginBottom: 34,
+                }}
+              >
+                <SmallCap>{active.label}</SmallCap>
+                <SmallCap color="var(--text-dim)">Selected state</SmallCap>
+              </div>
+              <h3
+                style={{
+                  margin: 0,
+                  fontFamily: "var(--font-display)",
+                  fontStyle: "italic",
+                  fontWeight: 400,
+                  fontSize: "clamp(34px, 5vw, 64px)",
+                  lineHeight: 0.96,
+                  color: "var(--cream)",
+                }}
+              >
+                {active.title}
+              </h3>
+              <div
+                style={{
+                  marginTop: 32,
+                  display: "grid",
+                  gap: 12,
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 12,
+                  lineHeight: 1.5,
+                  color: "var(--text-soft)",
+                }}
+              >
+                <span>{active.system}</span>
+                <span style={{ color: "var(--text-dim)" }}>
+                  signal: {active.signal}
+                </span>
+              </div>
+            </div>
+
+            <div
+              style={{
+                marginTop: 40,
+                borderTop: "1px solid var(--rule)",
+                paddingTop: 22,
+                display: "flex",
+                justifyContent: "space-between",
+                gap: 20,
+                alignItems: "flex-end",
+              }}
+            >
+              <div>
+                <SmallCap color="var(--text-dim)">
+                  {config.resultLabel}
+                </SmallCap>
+                <p
+                  style={{
+                    margin: "10px 0 0",
+                    fontFamily: "var(--font-body)",
+                    fontSize: 17,
+                    lineHeight: 1.45,
+                    color: "var(--text-soft)",
+                    maxWidth: 340,
+                  }}
+                >
+                  {active.feedback}
+                </p>
+              </div>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 11,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: accent,
+                  textAlign: "right",
+                }}
+              >
+                {config.resultValue}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: 28,
+            display: "grid",
+            gridTemplateColumns: "var(--case-state-step-columns, repeat(3, 1fr))",
+            gap: 1,
+            background: "var(--rule)",
+          }}
+        >
+          {config.steps.map((step, i) => (
+            <div
+              key={step.label}
+              style={{
+                minHeight: 74,
+                background:
+                  i === activeIndex
+                    ? "rgba(232,223,211,0.07)"
+                    : "rgba(15,13,11,0.8)",
+                padding: "16px",
+                color: i === activeIndex ? "var(--cream)" : "var(--text-dim)",
+              }}
+            >
+              <div
+                style={{
+                  height: 2,
+                  marginBottom: 14,
+                  background:
+                    i <= activeIndex
+                      ? `linear-gradient(90deg, ${accent}, transparent)`
+                      : "var(--rule)",
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: "var(--font-ui)",
+                  fontSize: 10,
+                  letterSpacing: "0.13em",
+                  textTransform: "uppercase",
+                }}
+              >
+                {step.title}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function InteractionBand({
   items,
   projectId,
+  kicker,
 }: {
   items: CaseStudyCard[];
   projectId: string;
+  kicker: string;
 }) {
-  const labels =
-    projectId === "pocketplan"
-      ? ["Input", "Motion", "State"]
-      : projectId === "notes"
-      ? ["Edit", "Persist", "Search"]
-      : ["Form", "Validate", "Confirm"];
+  const config = INTERACTION_MODELS[projectId] ?? INTERACTION_MODELS.pocketplan;
+  const [activeIndex, setActiveIndex] = useState(0);
   const [ref, revealed] = useRevealOnce<HTMLElement>();
+  const active = config.steps[activeIndex];
+  const activeCopy = items[activeIndex] ?? items[0];
 
   return (
     <section
@@ -810,7 +1548,7 @@ function InteractionBand({
         >
           <div>
             <SmallCap style={{ color: "var(--text-dim)" }}>
-              v. Interaction model
+              {kicker}
             </SmallCap>
             <h2
               style={{
@@ -822,7 +1560,7 @@ function InteractionBand({
                 color: "var(--cream)",
               }}
             >
-              Product logic, made visible.
+              {config.title}
             </h2>
           </div>
           <SmallCap>Engineered feel</SmallCap>
@@ -842,67 +1580,98 @@ function InteractionBand({
               border: "1px solid var(--rule)",
               background: "rgba(232,223,211,0.025)",
               padding: "34px",
-              minHeight: 360,
+              minHeight: "var(--case-interaction-panel-height, 520px)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
             }}
           >
             <div>
-              <SmallCap color="var(--accent)">Sequence</SmallCap>
-              <div style={{ marginTop: 34, display: "grid", gap: 16 }}>
-                {labels.map((label, i) => (
-                  <FadeIn
-                    key={label}
-                    delay={120 + i * 80}
-                    y={14}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "42px 1fr",
-                      gap: 16,
-                      alignItems: "center",
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: "50%",
-                        border: "1px solid var(--accent)",
-                        display: "grid",
-                        placeItems: "center",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: 10,
-                        color: "var(--accent)",
-                      }}
-                    >
-                      {i + 1}
-                    </span>
-                    <div>
-                      <div
-                        style={{
-                          fontFamily: "var(--font-ui)",
-                          fontSize: 11,
-                          letterSpacing: "0.18em",
-                          textTransform: "uppercase",
-                          color: "var(--cream)",
-                        }}
-                      >
-                        {label}
+              <SmallCap color="var(--accent)">State sequence</SmallCap>
+              <p
+                style={{
+                  margin: "28px 0 0",
+                  fontFamily: "var(--font-body)",
+                  fontSize: 18,
+                  lineHeight: 1.58,
+                  color: "var(--text-soft)",
+                }}
+              >
+                {config.body}
+              </p>
+              <div
+                role="list"
+                aria-label={`${projectId} interaction states`}
+                style={{ marginTop: 34, display: "grid", gap: 12 }}
+              >
+                {config.steps.map((step, i) => {
+                  const selected = i === activeIndex;
+
+                  return (
+                    <FadeIn key={step.label} delay={120 + i * 80} y={14}>
+                      <div role="listitem">
+                        <button
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() => setActiveIndex(i)}
+                          onMouseEnter={() => setActiveIndex(i)}
+                          className="motion-inspect"
+                          data-cursor-label="inspect"
+                          style={{
+                            width: "100%",
+                            border: "1px solid var(--rule)",
+                            background: selected
+                              ? "rgba(232,223,211,0.065)"
+                              : "rgba(232,223,211,0.018)",
+                            color: selected
+                              ? "var(--cream)"
+                              : "var(--text-soft)",
+                            padding: "18px",
+                            display: "grid",
+                            gridTemplateColumns: "auto 1fr auto",
+                            gap: 16,
+                            alignItems: "center",
+                            textAlign: "left",
+                            transition:
+                              "background var(--dur-micro) ease, color var(--dur-micro) ease",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontFamily: "var(--font-mono)",
+                              fontSize: 11,
+                              color: selected
+                                ? "var(--accent)"
+                                : "var(--text-dim)",
+                            }}
+                          >
+                            {step.label.slice(0, 2)}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: "var(--font-ui)",
+                              fontSize: 12,
+                              letterSpacing: "0.13em",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {step.title}
+                          </span>
+                          <span
+                            aria-hidden="true"
+                            style={{
+                              color: selected
+                                ? "var(--accent)"
+                                : "var(--text-dim)",
+                            }}
+                          >
+                            →
+                          </span>
+                        </button>
                       </div>
-                      <div
-                        style={{
-                          height: 1,
-                          marginTop: 10,
-                          background:
-                            i === labels.length - 1
-                              ? "var(--accent)"
-                              : "var(--rule)",
-                        }}
-                      />
-                    </div>
-                  </FadeIn>
-                ))}
+                    </FadeIn>
+                  );
+                })}
               </div>
             </div>
             <p
@@ -915,72 +1684,81 @@ function InteractionBand({
                 color: "var(--text-soft)",
               }}
             >
-              The case should not just describe polish; it should let the reader
-              see how the interface reacts under pressure.
+              {active.feedback}
             </p>
           </FadeIn>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "var(--case-card-columns, repeat(3, 1fr))",
-              gap: 1,
-              background: "var(--rule)",
-              border: "1px solid var(--rule)",
-            }}
-          >
-            {items.map((it, i) => (
-              <FadeIn
-                key={it.title}
-                delay={180 + i * 90}
-                y={30}
+          <FadeIn delay={140} y={30}>
+            <InteractionStateVisual
+              projectId={projectId}
+              config={config}
+              activeIndex={activeIndex}
+            />
+            <div
+              style={{
+                marginTop: 1,
+                display: "grid",
+                gridTemplateColumns: "var(--case-interaction-detail-columns, 0.82fr 1.18fr)",
+                gap: 1,
+                background: "var(--rule)",
+                border: "1px solid var(--rule)",
+                borderTop: 0,
+              }}
+            >
+              <div
                 style={{
                   background: "var(--ink)",
-                  padding: "38px 34px",
-                  minHeight: 360,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
+                  padding: "28px",
+                  minHeight: 190,
                 }}
               >
-                <span
+                <SmallCap color="var(--accent)">{active.system}</SmallCap>
+                <p
                   style={{
+                    margin: "20px 0 0",
                     fontFamily: "var(--font-mono)",
-                    fontSize: 11,
-                    color: "var(--accent)",
+                    fontSize: 12,
+                    lineHeight: 1.65,
+                    color: "var(--text-soft)",
                   }}
                 >
-                  0{i + 1}
-                </span>
-                <div>
-                  <h3
-                    style={{
-                      margin: "0 0 16px",
-                      fontFamily: "var(--font-display)",
-                      fontStyle: "italic",
-                      fontWeight: 400,
-                      fontSize: 34,
-                      lineHeight: 1.02,
-                      color: "var(--cream)",
-                    }}
-                  >
-                    {it.title}
-                  </h3>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontFamily: "var(--font-body)",
-                      fontSize: 17,
-                      lineHeight: 1.6,
-                      color: "var(--text-soft)",
-                    }}
-                  >
-                    {it.body}
-                  </p>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
+                  {active.signal}
+                </p>
+              </div>
+              <div
+                style={{
+                  background: "var(--ink)",
+                  padding: "28px",
+                  minHeight: 190,
+                }}
+              >
+                <h3
+                  style={{
+                    margin: 0,
+                    fontFamily: "var(--font-display)",
+                    fontStyle: "italic",
+                    fontWeight: 400,
+                    fontSize: 34,
+                    lineHeight: 1.02,
+                    color: "var(--cream)",
+                  }}
+                >
+                  {activeCopy.title}
+                </h3>
+                <p
+                  style={{
+                    margin: "16px 0 0",
+                    fontFamily: "var(--font-body)",
+                    fontSize: 17,
+                    lineHeight: 1.6,
+                    color: "var(--text-soft)",
+                  }}
+                >
+                  {activeCopy.body}
+                </p>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>
@@ -1013,6 +1791,25 @@ export default function CaseStudy({ projectId }: Props) {
 
   if (!p) return null;
   const S = p.sections;
+  const hasPocketPlanStateShowcase = projectId === "pocketplan";
+  const chapterShift = hasPocketPlanStateShowcase ? 1 : 0;
+  const roman = [
+    "",
+    "i",
+    "ii",
+    "iii",
+    "iv",
+    "v",
+    "vi",
+    "vii",
+    "viii",
+    "ix",
+    "x",
+  ];
+  const chapterKicker = (base: number, label: string) =>
+    `${roman[base + chapterShift]}. ${label}`;
+  const chapterNumber = (base: number) =>
+    String(base + chapterShift).padStart(2, "0");
 
   return (
     <div
@@ -1279,7 +2076,7 @@ export default function CaseStudy({ projectId }: Props) {
         style={{
           position: "relative",
           zIndex: 2,
-          padding: `0 var(--gutter) 110px`,
+          padding: `0 var(--gutter) var(--section-pad-sm)`,
         }}
       >
         <div
@@ -1327,18 +2124,49 @@ export default function CaseStudy({ projectId }: Props) {
 
       <ProductSystemChapter projectId={projectId} />
 
+      {hasPocketPlanStateShowcase && <PocketPlanStateShowcase />}
+
       {/* PROSE SECTIONS */}
       <div style={{ position: "relative", zIndex: 2 }}>
-        <ProseSection kicker="ii. Overview" n="02" heading="What it is." body={S.overview} />
-        <ProseSection kicker="iii. The challenge" n="03" heading="The problem worth solving." body={S.challenge} />
-        <ProseSection kicker="iv. Design thinking" n="04" heading="How I approached it." body={S.designThinking} />
+        <ProseSection
+          kicker={chapterKicker(2, "Overview")}
+          n={chapterNumber(2)}
+          heading="What it is."
+          body={S.overview}
+        />
+        <ProseSection
+          kicker={chapterKicker(3, "The challenge")}
+          n={chapterNumber(3)}
+          heading="The problem worth solving."
+          body={S.challenge}
+        />
+        <ProseSection
+          kicker={chapterKicker(4, "Design thinking")}
+          n={chapterNumber(4)}
+          heading="How I approached it."
+          body={S.designThinking}
+        />
       </div>
 
-      <InteractionBand items={S.interactionDetails} projectId={projectId} />
+      <InteractionBand
+        items={S.interactionDetails}
+        projectId={projectId}
+        kicker={chapterKicker(5, "Interaction model")}
+      />
 
       <div style={{ position: "relative", zIndex: 2 }}>
-        <CardGrid kicker="vi. Key features" n="06" heading="What I built." items={S.keyFeatures} />
-        <CardGrid kicker="vii. Technical decisions" n="07" heading="How it's built." items={S.technicalDecisions} />
+        <CardGrid
+          kicker={chapterKicker(6, "Key features")}
+          n={chapterNumber(6)}
+          heading="What I built."
+          items={S.keyFeatures}
+        />
+        <CardGrid
+          kicker={chapterKicker(7, "Technical decisions")}
+          n={chapterNumber(7)}
+          heading="How it's built."
+          items={S.technicalDecisions}
+        />
       </div>
 
       {/* OUTCOME */}
@@ -1356,7 +2184,9 @@ export default function CaseStudy({ projectId }: Props) {
       >
         <div style={{ maxWidth: 1300, margin: "0 auto" }}>
           <FadeIn y={12}>
-            <SmallCap style={{ color: "var(--text-dim)" }}>viii. Outcome</SmallCap>
+            <SmallCap style={{ color: "var(--text-dim)" }}>
+              {chapterKicker(8, "Outcome")}
+            </SmallCap>
           </FadeIn>
           <div
             style={{
@@ -1404,7 +2234,9 @@ export default function CaseStudy({ projectId }: Props) {
       >
         <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
           <FadeIn y={12}>
-            <SmallCap style={{ color: "var(--text-dim)" }}>ix. Lessons</SmallCap>
+            <SmallCap style={{ color: "var(--text-dim)" }}>
+              {chapterKicker(9, "Lessons")}
+            </SmallCap>
           </FadeIn>
           <FadeIn
             as="p"

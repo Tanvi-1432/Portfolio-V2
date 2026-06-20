@@ -22,7 +22,7 @@ export default function Contact({ active, onJump }: Props) {
         minHeight: "100vh",
         background: "var(--ink)",
         color: "var(--cream)",
-        padding: "160px var(--gutter) 180px",
+        padding: "var(--section-pad-lg) var(--gutter) var(--section-pad-xl)",
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",

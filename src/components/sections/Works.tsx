@@ -199,7 +199,7 @@ function PocketPlanShowcase({ onOpen }: ShowcaseProps) {
         data-pocket-reduced="true"
         style={{
           position: "relative",
-          padding: "120px var(--gutter)",
+          padding: "var(--section-pad-md) var(--gutter)",
           overflow: "hidden",
         }}
       >
@@ -959,7 +959,7 @@ export default function Works({ active, onOpen }: Props) {
       }}
     >
       {/* kicker */}
-      <div style={{ padding: "160px var(--gutter) 0" }}>
+      <div style={{ padding: "var(--section-pad-lg) var(--gutter) 0" }}>
         <div
           style={{
             display: "flex",
@@ -1003,10 +1003,10 @@ export default function Works({ active, onOpen }: Props) {
         style={{
           maxWidth: "var(--max-w)",
           margin: "0 auto",
-          padding: "40px var(--gutter) 0",
+          padding: "var(--section-gap-md) var(--gutter) 0",
           display: "flex",
           flexDirection: "column",
-          gap: 180,
+          gap: "var(--section-gap-lg)",
         }}
       >
         <ProjectSpread id="notes" align="left" mockH={460} onOpen={onOpen} />
@@ -1016,7 +1016,7 @@ export default function Works({ active, onOpen }: Props) {
       <div
         style={{
           maxWidth: "var(--max-w)",
-          margin: "160px auto 0",
+          margin: "var(--section-gap-lg) auto 0",
           padding: "0 var(--gutter)",
           textAlign: "center",
         }}
@@ -1025,7 +1025,7 @@ export default function Works({ active, onOpen }: Props) {
           <SmallCap>End of Projects · Capabilities follow</SmallCap>
         </div>
       </div>
-      <div style={{ height: 160 }} />
+      <div style={{ height: "var(--section-pad-md)" }} />
     </section>
   );
 }
