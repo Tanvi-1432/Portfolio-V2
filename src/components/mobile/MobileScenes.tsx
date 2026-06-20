@@ -710,7 +710,42 @@ export function MContact({ active, onJump }: { active: boolean; onJump: (id: str
             <li key={s.label} style={{ borderBottom: "1px solid var(--rule)" }}>
               <a href={s.href} target="_blank" rel="noopener noreferrer" style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "15px 0", textDecoration: "none", color: "var(--cream)" }}>
                 <SmallCap>{s.label}</SmallCap>
-                <span style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 22, color: "var(--cream)" }}>{s.handle}<span style={{ color: "var(--accent)", fontStyle: "normal" }}> ↗</span></span>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "baseline",
+                    gap: 12,
+                    fontFamily: "var(--font-display)",
+                    fontStyle: "italic",
+                    fontSize: 22,
+                    color: "var(--cream)",
+                  }}
+                >
+                  {s.handle}
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      fontFamily: "var(--font-mono)",
+                      fontStyle: "normal",
+                      fontSize: 9,
+                      letterSpacing: "0.16em",
+                      textTransform: "uppercase",
+                      color: "var(--text-dim)",
+                    }}
+                  >
+                    Open
+                    <span
+                      style={{
+                        width: 22,
+                        height: 1,
+                        background: "var(--accent)",
+                      }}
+                    />
+                  </span>
+                </span>
               </a>
             </li>
           ))}

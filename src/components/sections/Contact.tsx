@@ -144,7 +144,7 @@ export default function Contact({ active, onJump }: Props) {
                   style={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: 4,
+                    gap: 8,
                     textDecoration: "none",
                     color: "var(--cream)",
                   }}
@@ -160,9 +160,29 @@ export default function Contact({ active, onJump }: Props) {
                     }}
                   >
                     {s.handle}
-                    <span style={{ color: "var(--accent)", fontStyle: "normal" }}>
-                      {" "}↗
-                    </span>
+                  </span>
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 10,
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 10,
+                      letterSpacing: "0.16em",
+                      textTransform: "uppercase",
+                      color: "var(--text-dim)",
+                    }}
+                  >
+                    Open
+                    <span
+                      style={{
+                        width: 34,
+                        height: 1,
+                        background: "var(--accent)",
+                        transform: "translateY(1px)",
+                      }}
+                    />
                   </span>
                 </a>
               </li>
