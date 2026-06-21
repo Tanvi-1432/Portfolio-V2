@@ -55,6 +55,11 @@ body {
   --case-prose-gap: 72px;
   --case-mock-height: 600px;
   --case-pocket-phone-card-h: 640px;
+  --case-proof-panel-h: 620px;
+  --case-proof-surface-h: 278px;
+  --case-proof-surface-copy-h: 142px;
+  --case-proof-decision-h: 164px;
+  --case-proof-decision-copy-h: 104px;
 }
 
 @media (max-width: 760px) {
@@ -82,20 +87,44 @@ body {
     --case-pocket-state-gap: 42px;
     --case-pocket-state-copy-top: auto;
     --case-pocket-state-pad: 20px;
+    --case-pocket-state-button-columns: 76px minmax(0, 1fr) 16px;
     --case-pocket-phone-gap: 18px;
     --case-pocket-phone-card-w: min(314px, 82vw);
     --case-pocket-phone-card-h: 580px;
     --case-pocket-state-detail-columns: 1fr;
+    --case-experience-columns: 1fr;
+    --case-experience-gap: 42px;
+    --case-experience-stage-columns: 1fr;
+    --case-experience-visual-h: 420px;
+    --case-experience-pad: 24px;
+    --case-experience-button-columns: 76px minmax(0, 1fr) 16px;
+    --case-proof-header-columns: 1fr;
+    --case-proof-columns: 1fr;
+    --case-proof-gap: 28px;
+    --case-proof-panel-columns: 1fr;
+    --case-proof-panel-gap: 28px;
+    --case-proof-panel-h: 900px;
+    --case-proof-panel-pad: 24px;
+    --case-proof-surface-h: 430px;
+    --case-proof-surface-copy-h: 236px;
+    --case-proof-decision-h: 320px;
+    --case-proof-decision-copy-h: 188px;
+    --case-proof-node-shift: 0;
+    --case-proof-decision-columns: 1fr;
     --case-state-columns: 1fr;
     --case-state-gap: 18px;
     --case-state-card-pad: 24px;
     --case-state-step-columns: 1fr;
     --case-card-columns: 1fr;
+    --case-interaction-header-columns: 1fr;
     --case-interaction-columns: 1fr;
+    --case-interaction-button-columns: 34px minmax(0, 1fr) 16px;
     --case-interaction-detail-columns: 1fr;
+    --case-interaction-detail-title-size: clamp(28px, 9vw, 34px);
     --case-interaction-panel-height: auto;
     --case-interaction-visual-height: auto;
     --case-interaction-visual-pad: 24px;
+    --case-state-result-columns: 1fr;
     --case-meta-columns: 1fr 1fr;
     --case-meta-gap: 24px;
     --case-metric-columns: 1fr 1fr;

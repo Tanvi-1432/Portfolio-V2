@@ -218,7 +218,8 @@ export default function Contact({ active, onJump }: Props) {
                 color: "var(--text-soft)",
               }}
             >
-              Set in Instrument Serif &amp; Newsreader. Built with Next.js, deployed on Vercel.
+              Set in Instrument Serif &amp; Newsreader. Built with Next.js,
+              deployed on Vercel.
             </p>
           </div>
         </FadeIn>

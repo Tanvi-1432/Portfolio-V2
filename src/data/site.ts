@@ -24,9 +24,9 @@ export const mobileNavSections: NavSection[] = [
 ];
 
 export const socials = [
-  { label: "GitHub",   handle: "@tanvi-c",  href: "https://github.com/tanvi-c" },
+  { label: "GitHub",   handle: "@Tanvi-1432",  href: "https://github.com/Tanvi-1432" },
   { label: "Read.cv",  handle: "/tanvi",    href: "https://read.cv/tanvi" },
-  { label: "LinkedIn", handle: "/in/tanvi", href: "https://linkedin.com/in/tanvi" },
+  { label: "LinkedIn", handle: "/in/tanvich", href: "https://www.linkedin.com/in/tanvich" },
 ];
 
 export const email = "tanvirahman678@gmail.com";

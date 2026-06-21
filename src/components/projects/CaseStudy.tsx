@@ -47,6 +47,22 @@ interface InteractionModelConfig {
   steps: InteractionStepConfig[];
 }
 
+interface ExperienceStageConfig {
+  label: string;
+  title: string;
+  body: string;
+  stat: string;
+  signal: string;
+}
+
+interface ExperienceShowcaseConfig {
+  eyebrow: string;
+  title: string;
+  body: string;
+  panelLabel: string;
+  stages: ExperienceStageConfig[];
+}
+
 const PRODUCT_CHAPTERS: Record<string, ProductChapterConfig> = {
   pocketplan: {
     kicker: "i. Product system",
@@ -272,6 +288,75 @@ const POCKETPLAN_PRODUCT_STATES = [
   },
 ];
 
+const PROJECT_EXPERIENCE_SHOWCASES: Record<string, ExperienceShowcaseConfig> = {
+  notes: {
+    eyebrow: "ii. Product flow",
+    title: "A note is never just a note.",
+    body:
+      "The product experience moves from expressive capture to structured retrieval. The case should make that transformation visible: writing, extracting, and finding all belong to one loop.",
+    panelLabel: "Local-first workspace",
+    stages: [
+      {
+        label: "01 Write",
+        title: "Capture stays tactile.",
+        body:
+          "The first touch is intentionally playful: sticky colors, rich editor states, tags, clips, and checklists all keep writing from feeling like another sterile CRUD form.",
+        stat: "TipTap",
+        signal: "rich text + task nodes",
+      },
+      {
+        label: "02 Organize",
+        title: "Structure appears without ceremony.",
+        body:
+          "Smart folders, pinned notes, due dates, and extracted tasks let the board become useful without asking the user to maintain a rigid database.",
+        stat: "6 folders",
+        signal: "reducer-owned workspace state",
+      },
+      {
+        label: "03 Retrieve",
+        title: "Search respects the shape of memory.",
+        body:
+          "Ranked search pulls from body text, tags, task labels, and clip metadata, so finding a note feels like remembering a thread rather than filtering a table.",
+        stat: "0 backend",
+        signal: "private IndexedDB persistence",
+      },
+    ],
+  },
+  "little-lemon": {
+    eyebrow: "ii. Product flow",
+    title: "The reservation path should feel inevitable.",
+    body:
+      "Little Lemon is deliberately small, so the product chapter needs to prove the details: the customer chooses, the form helps, and the confirmation closes the loop cleanly.",
+    panelLabel: "Reservation sequence",
+    stages: [
+      {
+        label: "01 Choose",
+        title: "One decision at a time.",
+        body:
+          "Date, time, party size, and contact details are staged so the user never has to decode the whole form before making the next useful choice.",
+        stat: "1 path",
+        signal: "date / party / contact",
+      },
+      {
+        label: "02 Correct",
+        title: "Validation behaves like guidance.",
+        body:
+          "Inline validation, clear constraints, and a typed schema make the interface feel helpful instead of punishing when the booking data is incomplete.",
+        stat: "Zod",
+        signal: "schema-backed field states",
+      },
+      {
+        label: "03 Confirm",
+        title: "The flow lands with confidence.",
+        body:
+          "The confirmation state, focus handoff, and responsive layout keep the final moment stable across phone, keyboard, and screen-reader paths.",
+        stat: "AA",
+        signal: "focus + confirmation handoff",
+      },
+    ],
+  },
+};
+
 interface Props {
   projectId: string;
 }
@@ -416,23 +501,35 @@ function ProseSection({
   );
 }
 
-function CardGrid({
+function BuildProofSection({
   kicker,
   n,
-  heading,
-  items,
+  projectId,
+  features,
+  decisions,
 }: {
   kicker: string;
   n: string;
-  heading: string;
-  items: CaseStudyCard[];
+  projectId: string;
+  features: CaseStudyCard[];
+  decisions: CaseStudyCard[];
 }) {
   const [ref, revealed] = useRevealOnce<HTMLElement>();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const accent =
+    projectId === "little-lemon" ? "rgba(217,164,82,0.72)" : "var(--accent)";
+  const proofItems = features.map((feature, i) => ({
+    feature,
+    decision: decisions[i] ?? decisions[0],
+    index: i,
+  }));
+  const active = proofItems[activeIndex] ?? proofItems[0];
 
   return (
     <section
       ref={ref}
       className="case-section case-chapter"
+      data-build-proof-section
       data-reveal-state={revealed ? "in" : "out"}
       style={{
         position: "relative",
@@ -443,10 +540,11 @@ function CardGrid({
       <div style={{ maxWidth: 1300, margin: "0 auto" }}>
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "baseline",
-            marginBottom: 56,
+            display: "grid",
+            gridTemplateColumns: "var(--case-proof-header-columns, minmax(0, 0.78fr) auto)",
+            gap: 36,
+            alignItems: "end",
+            marginBottom: 58,
           }}
         >
           <FadeIn y={12}>
@@ -455,81 +553,332 @@ function CardGrid({
               style={{
                 margin: "16px 0 0",
                 fontFamily: "var(--font-display)",
-                fontStyle: "italic",
                 fontWeight: 400,
-                fontSize: "clamp(34px, 4vw, 60px)",
-                lineHeight: 1,
-                letterSpacing: "-0.02em",
+                fontSize: "clamp(38px, 5vw, 78px)",
+                lineHeight: 0.98,
+                letterSpacing: "-0.025em",
                 color: "var(--cream)",
               }}
             >
               <RevealText block delay={80}>
-                {heading}
+                What actually got built.
               </RevealText>
             </h2>
+            <p
+              style={{
+                margin: "24px 0 0",
+                maxWidth: 650,
+                fontFamily: "var(--font-body)",
+                fontSize: 18,
+                lineHeight: 1.65,
+                color: "var(--text-soft)",
+              }}
+            >
+              Each visible product surface is paired with the implementation
+              choice that makes it hold together, so the work reads as product
+              thinking and frontend engineering in the same breath.
+            </p>
           </FadeIn>
           <FadeIn delay={120} y={10}>
             <FolioNumber size={40}>{n}</FolioNumber>
           </FadeIn>
         </div>
+
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "var(--case-card-columns, repeat(3, 1fr))",
-            gap: 1,
-            background: "var(--rule)",
-            border: "1px solid var(--rule)",
+            gridTemplateColumns: "var(--case-proof-columns, minmax(320px, 0.78fr) minmax(0, 1.22fr))",
+            gap: "var(--case-proof-gap, 48px)",
+            alignItems: "stretch",
           }}
         >
-          {items.map((it, i) => (
-            <FadeIn
-              key={i}
-              delay={140 + i * 70}
-              y={26}
+          <div style={{ display: "grid", gap: 1 }}>
+            {proofItems.map(({ feature, decision }, i) => {
+              const selected = i === activeIndex;
+              return (
+                <FadeIn key={feature.title} delay={140 + i * 70} y={22}>
+                  <button
+                    type="button"
+                    aria-pressed={selected}
+                    data-build-proof-tab={i}
+                    onClick={() => setActiveIndex(i)}
+                    onMouseEnter={() => setActiveIndex(i)}
+                    className="motion-inspect"
+                    data-cursor-label="proof"
+                    style={{
+                      width: "100%",
+                      minHeight: 126,
+                      display: "grid",
+                      gridTemplateColumns: "52px 1fr",
+                      gap: 18,
+                      textAlign: "left",
+                      border: "1px solid var(--rule)",
+                      background: selected
+                        ? "rgba(232,223,211,0.06)"
+                        : "rgba(232,223,211,0.018)",
+                      padding: "22px 20px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 11,
+                        color: selected ? "var(--accent)" : "var(--text-dim)",
+                      }}
+                    >
+                      0{i + 1}
+                    </span>
+                    <span>
+                      <span
+                        style={{
+                          display: "block",
+                          fontFamily: "var(--font-ui)",
+                          fontSize: 12,
+                          letterSpacing: "0.13em",
+                          textTransform: "uppercase",
+                          color: selected ? "var(--cream)" : "var(--text-soft)",
+                        }}
+                      >
+                        {feature.title}
+                      </span>
+                      <span
+                        style={{
+                          display: "block",
+                          marginTop: 12,
+                          fontFamily: "var(--font-body)",
+                          fontSize: 15,
+                          lineHeight: 1.55,
+                          color: "var(--text-dim)",
+                        }}
+                      >
+                        {decision.title}
+                      </span>
+                    </span>
+                  </button>
+                </FadeIn>
+              );
+            })}
+          </div>
+
+          <FadeIn delay={240} y={26}>
+            <div
+              data-build-proof-panel
               style={{
-                background: "var(--ink)",
-                padding: "40px 36px",
-                minHeight: 240,
-                display: "flex",
-                flexDirection: "column",
+                position: "relative",
+                height: "var(--case-proof-panel-h, 620px)",
+                border: "1px solid var(--rule)",
+                background:
+                  projectId === "little-lemon"
+                    ? "linear-gradient(145deg, rgba(217,164,82,0.08), rgba(20,17,14,0.94))"
+                    : "linear-gradient(145deg, rgba(200,65,43,0.10), rgba(20,17,14,0.94))",
+                overflow: "hidden",
+                padding: "var(--case-proof-panel-pad, 36px)",
               }}
             >
-              <span
+              <div
+                aria-hidden="true"
                 style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 11,
-                  color: "var(--text-dim)",
-                  marginBottom: 28,
+                  position: "absolute",
+                  inset: "auto -18% -34% 22%",
+                  height: "58%",
+                  borderRadius: "50%",
+                  background:
+                    projectId === "little-lemon"
+                      ? "radial-gradient(circle, rgba(217,164,82,0.20), transparent 66%)"
+                      : "radial-gradient(circle, rgba(200,65,43,0.24), transparent 66%)",
+                  filter: "blur(12px)",
+                }}
+              />
+
+              <div
+                style={{
+                  position: "relative",
+                  zIndex: 1,
+                  height: "calc(var(--case-proof-panel-h, 620px) - (var(--case-proof-panel-pad, 36px) * 2))",
+                  display: "grid",
+                  gridTemplateRows:
+                    "auto var(--case-proof-surface-h, 278px) var(--case-proof-decision-h, 164px)",
+                  gap: 34,
+                  overflow: "hidden",
                 }}
               >
-                0{i + 1}
-              </span>
-              <h4
-                style={{
-                  margin: "0 0 14px",
-                  fontFamily: "var(--font-display)",
-                  fontStyle: "italic",
-                  fontWeight: 400,
-                  fontSize: 28,
-                  lineHeight: 1.05,
-                  color: "var(--cream)",
-                }}
-              >
-                {it.title}
-              </h4>
-              <p
-                style={{
-                  margin: 0,
-                  fontFamily: "var(--font-body)",
-                  fontSize: 16,
-                  lineHeight: 1.6,
-                  color: "var(--text-soft)",
-                }}
-              >
-                {it.body}
-              </p>
-            </FadeIn>
-          ))}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    gap: 20,
+                    alignItems: "baseline",
+                    borderBottom: "1px solid var(--rule)",
+                    paddingBottom: 18,
+                  }}
+                >
+                  <SmallCap color={accent}>Build proof</SmallCap>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 11,
+                      color: "var(--text-dim)",
+                    }}
+                  >
+                    0{active.index + 1} / 03
+                  </span>
+                </div>
+
+                <div
+                  data-build-proof-surface
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "var(--case-proof-panel-columns, minmax(0, 0.95fr) minmax(0, 1.05fr))",
+                    gap: "var(--case-proof-panel-gap, 34px)",
+                    alignItems: "center",
+                    height: "var(--case-proof-surface-h, 278px)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "auto 1fr",
+                      gap: 16,
+                      alignItems: "stretch",
+                    }}
+                  >
+                    <div
+                      aria-hidden="true"
+                      style={{
+                        width: 1,
+                        background: "var(--rule)",
+                        position: "relative",
+                      }}
+                    >
+                      <span
+                        style={{
+                          position: "absolute",
+                          left: -3,
+                          top: `${active.index * 34 + 8}%`,
+                          width: 7,
+                          height: 7,
+                          borderRadius: "50%",
+                          background: accent,
+                          transition:
+                            "top var(--dur-med) var(--ease-cinematic)",
+                        }}
+                      />
+                    </div>
+                    <div style={{ display: "grid", gap: 16 }}>
+                      {proofItems.map(({ feature }, i) => (
+                        <div
+                          key={feature.title}
+                          style={{
+                            border: "1px solid rgba(232,223,211,0.13)",
+                            padding: "14px 16px",
+                            background:
+                              i === activeIndex
+                                ? "rgba(232,223,211,0.055)"
+                                : "rgba(232,223,211,0.018)",
+                            transform:
+                              i === activeIndex
+                                ? "translateX(var(--case-proof-node-shift, 10px))"
+                                : "translateX(0)",
+                            transition:
+                              "transform var(--dur-med) var(--ease-cinematic), background var(--dur-micro) ease",
+                          }}
+                        >
+                          <span
+                            style={{
+                              display: "block",
+                              fontFamily: "var(--font-ui)",
+                              fontSize: 10,
+                              letterSpacing: "0.15em",
+                              textTransform: "uppercase",
+                              color:
+                                i === activeIndex
+                                  ? "var(--cream)"
+                                  : "var(--text-dim)",
+                            }}
+                          >
+                            Surface {String(i + 1).padStart(2, "0")}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div style={{ minWidth: 0, overflow: "hidden" }}>
+                    <SmallCap color="var(--text-dim)">Product surface</SmallCap>
+                    <h3
+                      style={{
+                        margin: "14px 0 0",
+                        fontFamily: "var(--font-display)",
+                        fontStyle: "italic",
+                        fontWeight: 400,
+                        fontSize: "clamp(30px, 3.2vw, 48px)",
+                        lineHeight: 1.04,
+                        color: "var(--cream)",
+                      }}
+                    >
+                      {active.feature.title}
+                    </h3>
+                    <p
+                      style={{
+                        margin: "18px 0 0",
+                        fontFamily: "var(--font-body)",
+                        fontSize: 17,
+                        lineHeight: 1.62,
+                        color: "var(--text-soft)",
+                        maxHeight: "var(--case-proof-surface-copy-h, 142px)",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {active.feature.body}
+                    </p>
+                  </div>
+                </div>
+
+                <div
+                  data-build-proof-decision
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "var(--case-proof-decision-columns, 160px 1fr)",
+                    gap: 22,
+                    borderTop: "1px solid var(--rule)",
+                    paddingTop: 24,
+                    height: "var(--case-proof-decision-h, 164px)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <SmallCap color="var(--text-dim)">Implementation</SmallCap>
+                  <div style={{ minWidth: 0, overflow: "hidden" }}>
+                    <h4
+                      style={{
+                        margin: 0,
+                        fontFamily: "var(--font-ui)",
+                        fontSize: 13,
+                        letterSpacing: "0.13em",
+                        textTransform: "uppercase",
+                        color: "var(--cream)",
+                      }}
+                    >
+                      {active.decision.title}
+                    </h4>
+                    <p
+                      style={{
+                        margin: "12px 0 0",
+                        fontFamily: "var(--font-body)",
+                        fontSize: 16,
+                        lineHeight: 1.62,
+                        color: "var(--text-soft)",
+                        maxHeight: "var(--case-proof-decision-copy-h, 104px)",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {active.decision.body}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       </div>
     </section>
@@ -974,6 +1323,8 @@ function PocketPlanStateShowcase() {
         style={{
           maxWidth: "var(--max-w)",
           margin: "0 auto",
+          width: "100%",
+          minWidth: 0,
           display: "grid",
           gridTemplateColumns:
             "var(--case-pocket-state-columns, minmax(280px, 0.72fr) minmax(0, 1.28fr))",
@@ -985,6 +1336,8 @@ function PocketPlanStateShowcase() {
           style={{
             position: "sticky",
             top: "var(--case-pocket-state-copy-top, 116px)",
+            width: "100%",
+            minWidth: 0,
           }}
         >
           <FadeIn y={12}>
@@ -1002,6 +1355,7 @@ function PocketPlanStateShowcase() {
                 fontSize: "clamp(38px, 5vw, 76px)",
                 lineHeight: 0.98,
                 color: "var(--cream)",
+                maxWidth: "100%",
               }}
             >
               Three screens, one financial answer.
@@ -1033,7 +1387,7 @@ function PocketPlanStateShowcase() {
               display: "grid",
               gap: 1,
               marginTop: 36,
-              maxWidth: 520,
+              maxWidth: "min(520px, 100%)",
             }}
           >
             {POCKETPLAN_PRODUCT_STATES.map((state, index) => {
@@ -1051,7 +1405,8 @@ function PocketPlanStateShowcase() {
                       style={{
                         width: "100%",
                         display: "grid",
-                        gridTemplateColumns: "92px 1fr auto",
+                        gridTemplateColumns:
+                          "var(--case-pocket-state-button-columns, 92px minmax(0, 1fr) auto)",
                         gap: 18,
                         alignItems: "center",
                         textAlign: "left",
@@ -1076,10 +1431,13 @@ function PocketPlanStateShowcase() {
                       </span>
                       <span
                         style={{
+                          minWidth: 0,
                           fontFamily: "var(--font-ui)",
                           fontSize: 12,
+                          lineHeight: 1.35,
                           letterSpacing: "0.13em",
                           textTransform: "uppercase",
+                          overflowWrap: "anywhere",
                         }}
                       >
                         {state.signal}
@@ -1100,9 +1458,11 @@ function PocketPlanStateShowcase() {
           </div>
         </div>
 
-        <FadeIn delay={180} y={28}>
+        <FadeIn delay={180} y={28} style={{ minWidth: 0, width: "100%" }}>
           <div
             style={{
+              width: "100%",
+              minWidth: 0,
               border: "1px solid var(--rule)",
               background:
                 "linear-gradient(145deg, rgba(200,65,43,0.10), rgba(15,13,11,0.94))",
@@ -1138,6 +1498,8 @@ function PocketPlanStateShowcase() {
               onScroll={handleRailScroll}
               data-lenis-prevent
               style={{
+                width: "100%",
+                minWidth: 0,
                 display: "flex",
                 gap: "var(--case-pocket-phone-gap, 28px)",
                 overflowX: "auto",
@@ -1243,6 +1605,278 @@ function PocketPlanStateShowcase() {
   );
 }
 
+function ProjectExperienceShowcase({ projectId }: { projectId: string }) {
+  const config = PROJECT_EXPERIENCE_SHOWCASES[projectId];
+  const [ref, revealed] = useRevealOnce<HTMLElement>();
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  if (!config) return null;
+
+  const active = config.stages[activeIndex] ?? config.stages[0];
+  const warm = projectId === "little-lemon";
+  const accent = warm ? "rgba(217,164,82,0.74)" : "var(--accent)";
+
+  return (
+    <section
+      ref={ref}
+      className="case-section case-chapter"
+      data-reveal-state={revealed ? "in" : "out"}
+      style={{
+        position: "relative",
+        zIndex: 2,
+        padding: "var(--case-section-pad, 120px var(--gutter))",
+        borderTop: "1px solid var(--rule)",
+        background: warm
+          ? "linear-gradient(180deg, var(--ink), rgba(34,25,15,0.62) 52%, var(--ink))"
+          : "linear-gradient(180deg, var(--ink), rgba(27,23,20,0.68) 52%, var(--ink))",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: "var(--max-w)",
+          margin: "0 auto",
+          width: "100%",
+          minWidth: 0,
+          display: "grid",
+          gridTemplateColumns:
+            "var(--case-experience-columns, minmax(300px, 0.7fr) minmax(0, 1.3fr))",
+          gap: "var(--case-experience-gap, 76px)",
+          alignItems: "start",
+        }}
+      >
+        <div style={{ minWidth: 0, width: "100%" }}>
+          <FadeIn y={12}>
+            <SmallCap style={{ color: "var(--text-dim)" }}>
+              {config.eyebrow}
+            </SmallCap>
+            <div style={{ marginTop: 22 }}>
+              <FolioNumber size={44}>02</FolioNumber>
+            </div>
+            <h2
+              style={{
+                margin: "28px 0 0",
+                fontFamily: "var(--font-display)",
+                fontWeight: 400,
+                fontSize: "clamp(38px, 5vw, 76px)",
+                lineHeight: 0.98,
+                color: "var(--cream)",
+              }}
+            >
+              <RevealText block delay={80}>
+                {config.title}
+              </RevealText>
+            </h2>
+          </FadeIn>
+
+          <FadeIn
+            as="p"
+            delay={160}
+            y={20}
+            style={{
+              margin: "26px 0 0",
+              fontFamily: "var(--font-body)",
+              fontSize: 18,
+              lineHeight: 1.65,
+              color: "var(--text-soft)",
+              maxWidth: 540,
+            }}
+          >
+            {config.body}
+          </FadeIn>
+
+          <div
+            role="list"
+            aria-label={`${projectId} product flow states`}
+            style={{
+              display: "grid",
+              gap: 1,
+              marginTop: 36,
+              maxWidth: "min(540px, 100%)",
+            }}
+          >
+            {config.stages.map((stage, index) => {
+              const selected = index === activeIndex;
+
+              return (
+                <FadeIn key={stage.label} delay={230 + index * 70} y={14}>
+                  <div role="listitem">
+                    <button
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => setActiveIndex(index)}
+                      onMouseEnter={() => setActiveIndex(index)}
+                      className="motion-inspect"
+                      data-cursor-label="inspect"
+                      style={{
+                        width: "100%",
+                        display: "grid",
+                        gridTemplateColumns:
+                          "var(--case-experience-button-columns, 82px minmax(0, 1fr) auto)",
+                        gap: 18,
+                        alignItems: "center",
+                        textAlign: "left",
+                        border: "1px solid var(--rule)",
+                        background: selected
+                          ? "rgba(232,223,211,0.065)"
+                          : "rgba(232,223,211,0.018)",
+                        color: selected ? "var(--cream)" : "var(--text-soft)",
+                        padding: "18px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 11,
+                          color: selected ? accent : "var(--text-dim)",
+                        }}
+                      >
+                        {stage.label}
+                      </span>
+                      <span
+                        style={{
+                          minWidth: 0,
+                          fontFamily: "var(--font-ui)",
+                          fontSize: 12,
+                          lineHeight: 1.35,
+                          letterSpacing: "0.13em",
+                          textTransform: "uppercase",
+                          overflowWrap: "anywhere",
+                        }}
+                      >
+                        {stage.signal}
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        style={{ color: selected ? accent : "var(--text-dim)" }}
+                      >
+                        →
+                      </span>
+                    </button>
+                  </div>
+                </FadeIn>
+              );
+            })}
+          </div>
+        </div>
+
+        <FadeIn delay={180} y={28} style={{ minWidth: 0, width: "100%" }}>
+          <div
+            style={{
+              width: "100%",
+              minWidth: 0,
+              border: "1px solid var(--rule)",
+              background: warm
+                ? "linear-gradient(145deg, rgba(217,164,82,0.09), rgba(15,13,11,0.94))"
+                : "linear-gradient(145deg, rgba(200,65,43,0.09), rgba(15,13,11,0.94))",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: 18,
+                padding: "22px var(--case-experience-pad, 30px)",
+                borderBottom: "1px solid var(--rule)",
+              }}
+            >
+              <SmallCap color={accent}>{config.panelLabel}</SmallCap>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 11,
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--text-dim)",
+                }}
+              >
+                active / {String(activeIndex + 1).padStart(2, "0")}
+              </span>
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "var(--case-experience-stage-columns, 1fr 0.72fr)",
+                gap: 1,
+                background: "var(--rule)",
+              }}
+            >
+              <div
+              style={{
+                minHeight: "var(--case-experience-visual-h, 520px)",
+                background: "rgba(15,13,11,0.88)",
+                position: "relative",
+                overflow: "hidden",
+                minWidth: 0,
+              }}
+            >
+                <ProjectHeroMock id={projectId} />
+              </div>
+
+              <div
+                style={{
+                  background: "var(--ink)",
+                  padding: "var(--case-experience-pad, 30px)",
+                  minWidth: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div>
+                  <SmallCap color="var(--text-dim)">Selected state</SmallCap>
+                  <div
+                    style={{
+                      marginTop: 20,
+                      fontFamily: "var(--font-display)",
+                      fontStyle: "italic",
+                      fontWeight: 400,
+                      fontSize: "clamp(46px, 6vw, 84px)",
+                      lineHeight: 0.92,
+                      color: "var(--cream)",
+                    }}
+                  >
+                    {active.stat}
+                  </div>
+                </div>
+                <div style={{ marginTop: 44 }}>
+                  <h3
+                    style={{
+                      margin: 0,
+                      fontFamily: "var(--font-display)",
+                      fontStyle: "italic",
+                      fontWeight: 400,
+                      fontSize: "clamp(30px, 4vw, 48px)",
+                      lineHeight: 1.02,
+                      color: "var(--cream)",
+                    }}
+                  >
+                    {active.title}
+                  </h3>
+                  <p
+                    style={{
+                      margin: "18px 0 0",
+                      fontFamily: "var(--font-body)",
+                      fontSize: 17,
+                      lineHeight: 1.6,
+                      color: "var(--text-soft)",
+                    }}
+                  >
+                    {active.body}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </FadeIn>
+      </div>
+    </section>
+  );
+}
+
 function InteractionStateVisual({
   projectId,
   config,
@@ -1260,6 +1894,8 @@ function InteractionStateVisual({
     <div
       aria-hidden="true"
       style={{
+        width: "100%",
+        minWidth: 0,
         minHeight: "var(--case-interaction-visual-height, 520px)",
         border: "1px solid var(--rule)",
         background:
@@ -1314,9 +1950,17 @@ function InteractionStateVisual({
             gridTemplateColumns: "var(--case-state-columns, 1fr 1.15fr)",
             gap: "var(--case-state-gap, 28px)",
             alignItems: "stretch",
+            minWidth: 0,
           }}
         >
-          <div style={{ display: "grid", gap: 1, background: "var(--rule)" }}>
+          <div
+            style={{
+              display: "grid",
+              gap: 1,
+              background: "var(--rule)",
+              minWidth: 0,
+            }}
+          >
             {config.laneLabels.map((lane, i) => (
               <div
                 key={lane}
@@ -1325,6 +1969,7 @@ function InteractionStateVisual({
                   padding: "22px 20px",
                   display: "grid",
                   gap: 14,
+                  minWidth: 0,
                 }}
               >
                 <span
@@ -1338,11 +1983,14 @@ function InteractionStateVisual({
                 </span>
                 <span
                   style={{
+                    minWidth: 0,
                     fontFamily: "var(--font-ui)",
                     fontSize: 11,
+                    lineHeight: 1.35,
                     letterSpacing: "0.14em",
                     textTransform: "uppercase",
                     color: "var(--text-soft)",
+                    overflowWrap: "anywhere",
                   }}
                 >
                   {lane}
@@ -1365,6 +2013,7 @@ function InteractionStateVisual({
               border: "1px solid var(--rule)",
               background: "rgba(232,223,211,0.035)",
               padding: "var(--case-state-card-pad, 30px)",
+              minWidth: 0,
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -1419,8 +2068,9 @@ function InteractionStateVisual({
                 marginTop: 40,
                 borderTop: "1px solid var(--rule)",
                 paddingTop: 22,
-                display: "flex",
-                justifyContent: "space-between",
+                display: "grid",
+                gridTemplateColumns:
+                  "var(--case-state-result-columns, minmax(0, 1fr) auto)",
                 gap: 20,
                 alignItems: "flex-end",
               }}
@@ -1437,6 +2087,7 @@ function InteractionStateVisual({
                     lineHeight: 1.45,
                     color: "var(--text-soft)",
                     maxWidth: 340,
+                    overflowWrap: "anywhere",
                   }}
                 >
                   {active.feedback}
@@ -1465,6 +2116,7 @@ function InteractionStateVisual({
             gridTemplateColumns: "var(--case-state-step-columns, repeat(3, 1fr))",
             gap: 1,
             background: "var(--rule)",
+            minWidth: 0,
           }}
         >
           {config.steps.map((step, i) => (
@@ -1478,6 +2130,7 @@ function InteractionStateVisual({
                     : "rgba(15,13,11,0.8)",
                 padding: "16px",
                 color: i === activeIndex ? "var(--cream)" : "var(--text-dim)",
+                minWidth: 0,
               }}
             >
               <div
@@ -1494,8 +2147,10 @@ function InteractionStateVisual({
                 style={{
                   fontFamily: "var(--font-ui)",
                   fontSize: 10,
+                  lineHeight: 1.35,
                   letterSpacing: "0.13em",
                   textTransform: "uppercase",
+                  overflowWrap: "anywhere",
                 }}
               >
                 {step.title}
@@ -1537,16 +2192,25 @@ function InteractionBand({
           "linear-gradient(180deg, rgba(27,23,20,0.5), var(--ink))",
       }}
     >
-      <div style={{ maxWidth: "var(--max-w)", margin: "0 auto" }}>
+      <div
+        style={{
+          maxWidth: "var(--max-w)",
+          margin: "0 auto",
+          width: "100%",
+          minWidth: 0,
+        }}
+      >
         <div
           style={{
-            display: "flex",
-            justifyContent: "space-between",
+            display: "grid",
+            gridTemplateColumns:
+              "var(--case-interaction-header-columns, minmax(0, 1fr) auto)",
+            gap: 28,
             alignItems: "baseline",
             marginBottom: 52,
           }}
         >
-          <div>
+          <div style={{ minWidth: 0 }}>
             <SmallCap style={{ color: "var(--text-dim)" }}>
               {kicker}
             </SmallCap>
@@ -1572,11 +2236,14 @@ function InteractionBand({
             gridTemplateColumns: "var(--case-interaction-columns, 0.8fr 1.2fr)",
             gap: "var(--case-prose-gap, 80px)",
             alignItems: "stretch",
+            minWidth: 0,
           }}
         >
           <FadeIn
             y={24}
             style={{
+              minWidth: 0,
+              width: "100%",
               border: "1px solid var(--rule)",
               background: "rgba(232,223,211,0.025)",
               padding: "34px",
@@ -1628,7 +2295,8 @@ function InteractionBand({
                               : "var(--text-soft)",
                             padding: "18px",
                             display: "grid",
-                            gridTemplateColumns: "auto 1fr auto",
+                            gridTemplateColumns:
+                              "var(--case-interaction-button-columns, auto minmax(0, 1fr) auto)",
                             gap: 16,
                             alignItems: "center",
                             textAlign: "left",
@@ -1649,10 +2317,13 @@ function InteractionBand({
                           </span>
                           <span
                             style={{
+                              minWidth: 0,
                               fontFamily: "var(--font-ui)",
                               fontSize: 12,
+                              lineHeight: 1.35,
                               letterSpacing: "0.13em",
                               textTransform: "uppercase",
+                              overflowWrap: "anywhere",
                             }}
                           >
                             {step.title}
@@ -1688,7 +2359,7 @@ function InteractionBand({
             </p>
           </FadeIn>
 
-          <FadeIn delay={140} y={30}>
+          <FadeIn delay={140} y={30} style={{ minWidth: 0, width: "100%" }}>
             <InteractionStateVisual
               projectId={projectId}
               config={config}
@@ -1703,6 +2374,7 @@ function InteractionBand({
                 background: "var(--rule)",
                 border: "1px solid var(--rule)",
                 borderTop: 0,
+                minWidth: 0,
               }}
             >
               <div
@@ -1710,6 +2382,7 @@ function InteractionBand({
                   background: "var(--ink)",
                   padding: "28px",
                   minHeight: 190,
+                  minWidth: 0,
                 }}
               >
                 <SmallCap color="var(--accent)">{active.system}</SmallCap>
@@ -1720,6 +2393,7 @@ function InteractionBand({
                     fontSize: 12,
                     lineHeight: 1.65,
                     color: "var(--text-soft)",
+                    overflowWrap: "anywhere",
                   }}
                 >
                   {active.signal}
@@ -1730,6 +2404,7 @@ function InteractionBand({
                   background: "var(--ink)",
                   padding: "28px",
                   minHeight: 190,
+                  minWidth: 0,
                 }}
               >
                 <h3
@@ -1738,7 +2413,7 @@ function InteractionBand({
                     fontFamily: "var(--font-display)",
                     fontStyle: "italic",
                     fontWeight: 400,
-                    fontSize: 34,
+                    fontSize: "var(--case-interaction-detail-title-size, 34px)",
                     lineHeight: 1.02,
                     color: "var(--cream)",
                   }}
@@ -1792,7 +2467,9 @@ export default function CaseStudy({ projectId }: Props) {
   if (!p) return null;
   const S = p.sections;
   const hasPocketPlanStateShowcase = projectId === "pocketplan";
-  const chapterShift = hasPocketPlanStateShowcase ? 1 : 0;
+  const hasExperienceShowcase =
+    hasPocketPlanStateShowcase || !!PROJECT_EXPERIENCE_SHOWCASES[projectId];
+  const chapterShift = hasExperienceShowcase ? 1 : 0;
   const roman = [
     "",
     "i",
@@ -2125,6 +2802,9 @@ export default function CaseStudy({ projectId }: Props) {
       <ProductSystemChapter projectId={projectId} />
 
       {hasPocketPlanStateShowcase && <PocketPlanStateShowcase />}
+      {!hasPocketPlanStateShowcase && (
+        <ProjectExperienceShowcase projectId={projectId} />
+      )}
 
       {/* PROSE SECTIONS */}
       <div style={{ position: "relative", zIndex: 2 }}>
@@ -2155,17 +2835,12 @@ export default function CaseStudy({ projectId }: Props) {
       />
 
       <div style={{ position: "relative", zIndex: 2 }}>
-        <CardGrid
-          kicker={chapterKicker(6, "Key features")}
+        <BuildProofSection
+          kicker={chapterKicker(6, "Build proof")}
           n={chapterNumber(6)}
-          heading="What I built."
-          items={S.keyFeatures}
-        />
-        <CardGrid
-          kicker={chapterKicker(7, "Technical decisions")}
-          n={chapterNumber(7)}
-          heading="How it's built."
-          items={S.technicalDecisions}
+          projectId={projectId}
+          features={S.keyFeatures}
+          decisions={S.technicalDecisions}
         />
       </div>
 
@@ -2185,7 +2860,7 @@ export default function CaseStudy({ projectId }: Props) {
         <div style={{ maxWidth: 1300, margin: "0 auto" }}>
           <FadeIn y={12}>
             <SmallCap style={{ color: "var(--text-dim)" }}>
-              {chapterKicker(8, "Outcome")}
+              {chapterKicker(7, "Outcome")}
             </SmallCap>
           </FadeIn>
           <div
@@ -2235,7 +2910,7 @@ export default function CaseStudy({ projectId }: Props) {
         <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
           <FadeIn y={12}>
             <SmallCap style={{ color: "var(--text-dim)" }}>
-              {chapterKicker(9, "Lessons")}
+              {chapterKicker(8, "Lessons")}
             </SmallCap>
           </FadeIn>
           <FadeIn
