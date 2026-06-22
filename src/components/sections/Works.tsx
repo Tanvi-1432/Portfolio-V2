@@ -41,6 +41,20 @@ const FRAMES = [
 
 type PocketFrame = (typeof FRAMES)[number];
 
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setMatches(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+
+  return matches;
+}
+
 function PocketFrameText({ frame }: { frame: PocketFrame }) {
   return (
     <>
@@ -114,6 +128,184 @@ interface ShowcaseProps {
   onOpen: (id: string) => void;
 }
 
+function PocketPlanRailShowcase({ onOpen }: ShowcaseProps) {
+  const proj = projects.pocketplan;
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const updateActiveScreen = () => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    const center = scroller.getBoundingClientRect().left + scroller.clientWidth / 2;
+    let next = activeIndex;
+    let closest = Number.POSITIVE_INFINITY;
+
+    Array.from(scroller.querySelectorAll<HTMLElement>("[data-pocket-tablet-slide]")).forEach(
+      (slide, index) => {
+        const rect = slide.getBoundingClientRect();
+        const distance = Math.abs(rect.left + rect.width / 2 - center);
+        if (distance < closest) {
+          closest = distance;
+          next = index;
+        }
+      }
+    );
+
+    if (next !== activeIndex) setActiveIndex(next);
+  };
+
+  return (
+    <section
+      aria-label="PocketPlan showcase"
+      data-pocket-tablet-showcase
+      style={{
+        position: "relative",
+        padding: "var(--section-pad-md) var(--gutter)",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "radial-gradient(ellipse 860px 620px at 84% 36%, rgba(200,65,43,0.11), transparent 62%)",
+          pointerEvents: "none",
+        }}
+      />
+      <div className="pocket-showcase-stage" style={{ position: "relative", maxWidth: "var(--max-w)", margin: "0 auto" }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1fr) auto",
+            gap: 32,
+            alignItems: "end",
+            paddingBottom: 34,
+            borderBottom: "1px solid var(--rule)",
+          }}
+        >
+          <div>
+            <SmallCap>Featured build</SmallCap>
+            <h3
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 400,
+                fontSize: "clamp(58px, 8vw, 88px)",
+                lineHeight: 0.92,
+                letterSpacing: "-0.03em",
+                color: "var(--cream)",
+                margin: "14px 0 10px",
+              }}
+            >
+              PocketPlan<span style={{ color: "var(--accent)", fontStyle: "italic" }}>.</span>
+            </h3>
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontStyle: "italic",
+                fontSize: 20,
+                color: "var(--text-soft)",
+                margin: 0,
+                maxWidth: 560,
+              }}
+            >
+              {proj.tagline}
+            </p>
+          </div>
+          <MagneticButton
+            type="button"
+            onClick={() => onOpen("pocketplan")}
+            data-cursor-label="open case"
+            aria-label="Open PocketPlan case study"
+            style={{
+              border: "1px solid var(--rule)",
+              borderRadius: 999,
+              padding: "11px 20px",
+              fontFamily: "var(--font-ui)",
+              fontSize: 11,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "var(--cream)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            Open full case <span style={{ color: "var(--accent)" }}>→</span>
+          </MagneticButton>
+        </div>
+
+        <div
+          ref={scrollerRef}
+          className="m-pocket-carousel"
+          data-lenis-prevent
+          onScroll={updateActiveScreen}
+          style={{
+            display: "flex",
+            gap: 26,
+            margin: "46px calc(var(--gutter) * -1) 0",
+            padding: "0 var(--gutter) 6px",
+            overflowX: "auto",
+            overflowY: "hidden",
+            scrollSnapType: "x mandatory",
+            scrollPaddingInline: "var(--gutter)",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          {FRAMES.map((frame, index) => (
+            <article
+              key={frame.tag}
+              data-pocket-tablet-slide
+              style={{
+                flex: "0 0 min(360px, calc(100vw - (var(--gutter) * 2)))",
+                scrollSnapAlign: "center",
+                display: "grid",
+                gridTemplateRows: "minmax(640px, 68vh) auto",
+                gap: 24,
+                opacity: index === activeIndex ? 1 : 0.62,
+                transform: index === activeIndex ? "scale(1)" : "scale(0.96)",
+                transition:
+                  "opacity var(--dur-medium) var(--ease-reveal), transform var(--dur-fade) var(--ease-inspect)",
+              }}
+            >
+              <div style={{ position: "relative", minWidth: 0, overflow: "hidden" }}>
+                <PocketPlanPhone screen={frame.screen} />
+              </div>
+              <div style={{ paddingBottom: 12 }}>
+                <PocketFrameText frame={frame} />
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 18, marginTop: 26 }}>
+          {FRAMES.map((frame, index) => (
+            <span
+              key={frame.tag}
+              aria-hidden="true"
+              style={{
+                width: index === activeIndex ? 42 : 14,
+                height: 4,
+                borderRadius: 999,
+                background: index === activeIndex ? "var(--accent)" : "rgba(232,223,211,0.2)",
+                transition: "width var(--dur-fast) ease, background var(--dur-fast) ease",
+              }}
+            />
+          ))}
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "var(--text-soft)" }}>
+            {String(activeIndex + 1).padStart(2, "0")} / 03
+          </span>
+          <span style={{ flex: 1 }} />
+          <SmallCap>Swipe</SmallCap>
+          <span aria-hidden="true" style={{ color: "var(--accent)" }}>→</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function PocketPlanShowcase({ onOpen }: ShowcaseProps) {
   const ref = useRef<HTMLElement>(null);
   const prefersReduced = usePrefersReducedMotion();
@@ -122,6 +314,7 @@ function PocketPlanShowcase({ onOpen }: ShowcaseProps) {
   const railFillRef = useRef<HTMLSpanElement>(null);
   const activeIndexRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  const isTabletLayout = useMediaQuery("(min-width: 761px) and (max-width: 1024px)");
   const proj = projects.pocketplan;
 
   const N = FRAMES.length;
@@ -190,6 +383,10 @@ function PocketPlanShowcase({ onOpen }: ShowcaseProps) {
       if (raf) cancelAnimationFrame(raf);
     };
   }, [N, prefersReduced]);
+
+  if (isTabletLayout) {
+    return <PocketPlanRailShowcase onOpen={onOpen} />;
+  }
 
   if (prefersReduced) {
     return (
@@ -709,7 +906,7 @@ function ProjectSpread({ id, align = "left", mockH = 460, onOpen }: SpreadProps)
       style={{
         position: "relative",
         width: "100%",
-        height: mockH,
+        height: `var(--project-mock-height, ${mockH}px)`,
         order: mockOnLeft ? 0 : 1,
         transform:
           !prefersReduced && hovered
@@ -781,8 +978,8 @@ function ProjectSpread({ id, align = "left", mockH = 460, onOpen }: SpreadProps)
     <div
       style={{
         order: mockOnLeft ? 1 : 0,
-        paddingLeft: mockOnLeft ? 16 : 0,
-        paddingRight: mockOnLeft ? 0 : 16,
+        paddingLeft: `var(--project-text-pad-left, ${mockOnLeft ? 16 : 0}px)`,
+        paddingRight: `var(--project-text-pad-right, ${mockOnLeft ? 0 : 16}px)`,
       }}
     >
       <div
@@ -799,7 +996,7 @@ function ProjectSpread({ id, align = "left", mockH = 460, onOpen }: SpreadProps)
         <SmallCap>{p.year}</SmallCap>
       </div>
 
-      <h4
+      <h3
         style={{
           margin: 0,
           fontFamily: "var(--font-display)",
@@ -824,7 +1021,7 @@ function ProjectSpread({ id, align = "left", mockH = 460, onOpen }: SpreadProps)
         >
           {p.tagline}
         </span>
-      </h4>
+      </h3>
 
       <p
         style={{
@@ -915,11 +1112,20 @@ function ProjectSpread({ id, align = "left", mockH = 460, onOpen }: SpreadProps)
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setHovered(true)}
       onBlur={() => setHovered(false)}
+      onPointerDown={(event) => {
+        if (event.pointerType !== "mouse") setHovered(true);
+      }}
+      onPointerUp={(event) => {
+        if (event.pointerType !== "mouse") setHovered(false);
+      }}
+      onPointerCancel={(event) => {
+        if (event.pointerType !== "mouse") setHovered(false);
+      }}
       data-cursor-variant="text"
       style={{
         display: "grid",
-        gridTemplateColumns: mockOnLeft ? "1.1fr 0.9fr" : "0.9fr 1.1fr",
-        gap: 72,
+        gridTemplateColumns: `var(--project-spread-columns, ${mockOnLeft ? "1.1fr 0.9fr" : "0.9fr 1.1fr"})`,
+        gap: "var(--project-spread-gap, 72px)",
         alignItems: "center",
       }}
     >
@@ -948,13 +1154,15 @@ interface Props {
 export default function Works({ active, onOpen }: Props) {
   return (
     <section
+      className="scene-shell"
       id="works"
       data-scene="works"
       data-reveal-state={active ? "in" : "out"}
       aria-label="Selected work"
       style={{
         position: "relative",
-        background: "var(--ink)",
+        background:
+          "linear-gradient(180deg, rgba(18,15,13,0.98) 0%, var(--ink) 6%, var(--ink) 93%, rgba(27,23,20,0.82) 100%)",
         color: "var(--text)",
       }}
     >
@@ -1016,16 +1224,14 @@ export default function Works({ active, onOpen }: Props) {
       <div
         style={{
           maxWidth: "var(--max-w)",
-          margin: "var(--section-gap-lg) auto 0",
+          margin: "64px auto 0",
           padding: "0 var(--gutter)",
           textAlign: "center",
         }}
       >
-        <div style={{ paddingTop: 28, borderTop: "1px solid var(--rule)" }}>
-          <SmallCap>End of Projects · Capabilities follow</SmallCap>
-        </div>
+        <div style={{ paddingTop: 28, borderTop: "1px solid var(--rule)" }} />
       </div>
-      <div style={{ height: "var(--section-pad-md)" }} />
+      <div style={{ height: 40 }} />
     </section>
   );
 }

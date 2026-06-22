@@ -49,7 +49,7 @@ export default function Header({ currentScene, onJump, openCase, onCloseCase }: 
             <>Case · {openCase!.title}</>
           ) : (
             <>
-              Portfolio · MMXXVI &nbsp;·&nbsp;{" "}
+              Portfolio &nbsp;·&nbsp;{" "}
               <span style={{ color: "var(--accent)" }}>●</span>{" "}
               {activeSection?.label ?? "Home"}
             </>

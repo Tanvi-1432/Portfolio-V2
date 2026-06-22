@@ -14,7 +14,7 @@ export function useMagnetic(
     const el = ref.current;
     if (!el) return;
     if (prefersReduced) return;
-    if (window.matchMedia("(hover: none)").matches) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
     el.style.willChange = "translate";
 

@@ -6,8 +6,8 @@
   --paper:        #EFE6D8;
   --cream:        #F1E8DC;
   --text:         #E8DFD3;
-  --text-soft:    rgba(232, 223, 211, 0.65);
-  --text-dim:     rgba(232, 223, 211, 0.55);
+  --text-soft:    rgba(232, 223, 211, 0.70);
+  --text-dim:     rgba(232, 223, 211, 0.62);
   --rule:         rgba(232, 223, 211, 0.18);
   --ink-screen:   #0E0B0A;
   --surface-overlay: rgba(20, 17, 14, 0.88);
@@ -65,6 +65,35 @@
   --z-menu:      90;
   --z-case:      80;
   --z-overlay:   70;
+
+  /* ── Home hero responsive tokens ────────────────────── */
+  --hero-title-size: clamp(88px, 15vw, 250px);
+  --hero-standfirst-columns: 1.4fr 1fr;
+  --hero-standfirst-gap: 64px;
+  --contact-email-size: clamp(36px, 7vw, 120px);
+}
+
+@media (min-width: 761px) and (max-width: 1024px) {
+  :root {
+    --max-w:        1180px;
+    --content-w:    1060px;
+    --read-w:       820px;
+    --gutter:       40px;
+    --section-pad:  124px;
+    --section-pad-xl: 132px;
+    --section-pad-lg: 112px;
+    --section-pad-md: 92px;
+    --section-pad-sm: 72px;
+    --section-gap-lg: 92px;
+    --section-gap-md: 66px;
+    --chrome-safe-top: 104px;
+    --chrome-safe-bottom: 76px;
+    /* Home hero collapses to single column on tablet portrait */
+    --hero-title-size: clamp(72px, 11vw, 150px);
+    --hero-standfirst-columns: 1fr;
+    --hero-standfirst-gap: 28px;
+    --contact-email-size: clamp(42px, 7vw, 72px);
+  }
 }
 
 @media (max-width: 760px) {
@@ -79,5 +108,36 @@
     --section-gap-md: 52px;
     --chrome-safe-top: 88px;
     --chrome-safe-bottom: 72px;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  :root {
+    --gutter:      22px;
+    --section-pad: 88px;
+    --section-pad-xl: 96px;
+    --section-pad-lg: 86px;
+    --section-pad-md: 70px;
+    --section-pad-sm: 58px;
+    --section-gap-lg: 64px;
+    --section-gap-md: 44px;
+    --chrome-safe-top: 82px;
+    --chrome-safe-bottom: 52px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :root {
+    --max-w:        1580px;
+    --content-w:    1460px;
+    --gutter:       72px;
+  }
+}
+
+@media (min-width: 2560px) {
+  :root {
+    --max-w:        1680px;
+    --content-w:    1540px;
+    --gutter:       88px;
   }
 }

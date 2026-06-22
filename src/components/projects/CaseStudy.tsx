@@ -13,6 +13,12 @@ import MagneticButton from "@/components/ui/MagneticButton";
 import ProjectHeroMock from "@/components/mockups/ProjectHeroMock";
 import PocketPlanPhone from "@/components/mockups/PocketPlanPhone";
 
+function pa(id: string, alpha: number): string {
+  const hex = projects[id]?.accent ?? "#C8412B";
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${alpha})`;
+}
+
 interface ProductStage {
   label: string;
   title: string;
@@ -516,8 +522,7 @@ function BuildProofSection({
 }) {
   const [ref, revealed] = useRevealOnce<HTMLElement>();
   const [activeIndex, setActiveIndex] = useState(0);
-  const accent =
-    projectId === "little-lemon" ? "rgba(217,164,82,0.72)" : "var(--accent)";
+  const accent = pa(projectId, 0.72);
   const proofItems = features.map((feature, i) => ({
     feature,
     decision: decisions[i] ?? decisions[0],
@@ -666,11 +671,9 @@ function BuildProofSection({
               style={{
                 position: "relative",
                 height: "var(--case-proof-panel-h, 620px)",
+                minHeight: "var(--case-proof-panel-min-h, var(--case-proof-panel-h, 620px))",
                 border: "1px solid var(--rule)",
-                background:
-                  projectId === "little-lemon"
-                    ? "linear-gradient(145deg, rgba(217,164,82,0.08), rgba(20,17,14,0.94))"
-                    : "linear-gradient(145deg, rgba(200,65,43,0.10), rgba(20,17,14,0.94))",
+                background: `linear-gradient(145deg, ${pa(projectId, 0.09)}, rgba(20,17,14,0.94))`,
                 overflow: "hidden",
                 padding: "var(--case-proof-panel-pad, 36px)",
               }}
@@ -682,10 +685,7 @@ function BuildProofSection({
                   inset: "auto -18% -34% 22%",
                   height: "58%",
                   borderRadius: "50%",
-                  background:
-                    projectId === "little-lemon"
-                      ? "radial-gradient(circle, rgba(217,164,82,0.20), transparent 66%)"
-                      : "radial-gradient(circle, rgba(200,65,43,0.24), transparent 66%)",
+                  background: `radial-gradient(circle, ${pa(projectId, 0.22)}, transparent 66%)`,
                   filter: "blur(12px)",
                 }}
               />
@@ -694,12 +694,12 @@ function BuildProofSection({
                 style={{
                   position: "relative",
                   zIndex: 1,
-                  height: "calc(var(--case-proof-panel-h, 620px) - (var(--case-proof-panel-pad, 36px) * 2))",
+                  height: "var(--case-proof-inner-h, calc(var(--case-proof-panel-h, 620px) - (var(--case-proof-panel-pad, 36px) * 2)))",
                   display: "grid",
                   gridTemplateRows:
-                    "auto var(--case-proof-surface-h, 278px) var(--case-proof-decision-h, 164px)",
+                    "var(--case-proof-panel-rows, auto var(--case-proof-surface-h, 278px) var(--case-proof-decision-h, 164px))",
                   gap: 34,
-                  overflow: "hidden",
+                  overflow: "var(--case-proof-surface-overflow, hidden)",
                 }}
               >
                 <div
@@ -732,7 +732,8 @@ function BuildProofSection({
                     gap: "var(--case-proof-panel-gap, 34px)",
                     alignItems: "center",
                     height: "var(--case-proof-surface-h, 278px)",
-                    overflow: "hidden",
+                    minHeight: "var(--case-proof-surface-min-h, 0px)",
+                    overflow: "var(--case-proof-surface-overflow, hidden)",
                   }}
                 >
                   <div
@@ -761,7 +762,7 @@ function BuildProofSection({
                           borderRadius: "50%",
                           background: accent,
                           transition:
-                            "top var(--dur-med) var(--ease-cinematic)",
+                            "top var(--dur-medium) var(--ease-cinema)",
                         }}
                       />
                     </div>
@@ -781,7 +782,7 @@ function BuildProofSection({
                                 ? "translateX(var(--case-proof-node-shift, 10px))"
                                 : "translateX(0)",
                             transition:
-                              "transform var(--dur-med) var(--ease-cinematic), background var(--dur-micro) ease",
+                              "transform var(--dur-medium) var(--ease-cinema), background var(--dur-micro) ease",
                           }}
                         >
                           <span
@@ -827,7 +828,7 @@ function BuildProofSection({
                         lineHeight: 1.62,
                         color: "var(--text-soft)",
                         maxHeight: "var(--case-proof-surface-copy-h, 142px)",
-                        overflow: "hidden",
+                        overflow: "var(--case-proof-copy-overflow, hidden)",
                       }}
                     >
                       {active.feature.body}
@@ -844,11 +845,11 @@ function BuildProofSection({
                     borderTop: "1px solid var(--rule)",
                     paddingTop: 24,
                     height: "var(--case-proof-decision-h, 164px)",
-                    overflow: "hidden",
+                    overflow: "var(--case-proof-surface-overflow, hidden)",
                   }}
                 >
                   <SmallCap color="var(--text-dim)">Implementation</SmallCap>
-                  <div style={{ minWidth: 0, overflow: "hidden" }}>
+                  <div style={{ minWidth: 0, overflow: "var(--case-proof-copy-overflow, hidden)" }}>
                     <h4
                       style={{
                         margin: 0,
@@ -869,7 +870,7 @@ function BuildProofSection({
                         lineHeight: 1.62,
                         color: "var(--text-soft)",
                         maxHeight: "var(--case-proof-decision-copy-h, 104px)",
-                        overflow: "hidden",
+                        overflow: "var(--case-proof-copy-overflow, hidden)",
                       }}
                     >
                       {active.decision.body}
@@ -896,8 +897,7 @@ function ProductSystemVisual({
   artifacts: string[];
   systemLabel: string;
 }) {
-  const accent =
-    projectId === "little-lemon" ? "rgba(217,164,82,0.72)" : "var(--accent)";
+  const accent = pa(projectId, 0.72);
   const rows =
     projectId === "pocketplan"
       ? ["income + expenses", "merchant pattern", "budget envelope"]
@@ -912,10 +912,7 @@ function ProductSystemVisual({
         position: "relative",
         minHeight: "var(--case-system-visual-height, 560px)",
         border: "1px solid var(--rule)",
-        background:
-          projectId === "little-lemon"
-            ? "linear-gradient(145deg, rgba(217,164,82,0.08), rgba(20,17,14,0.92))"
-            : "linear-gradient(145deg, rgba(200,65,43,0.10), rgba(20,17,14,0.92))",
+        background: `linear-gradient(145deg, ${pa(projectId, 0.09)}, rgba(20,17,14,0.92))`,
         overflow: "hidden",
         padding: "var(--case-system-visual-pad, 34px)",
       }}
@@ -927,10 +924,7 @@ function ProductSystemVisual({
           width: "70%",
           aspectRatio: "1 / 1",
           borderRadius: "50%",
-          background:
-            projectId === "little-lemon"
-              ? "radial-gradient(circle, rgba(217,164,82,0.22), transparent 64%)"
-              : "radial-gradient(circle, rgba(200,65,43,0.24), transparent 64%)",
+          background: `radial-gradient(circle, ${pa(projectId, 0.22)}, transparent 64%)`,
           filter: "blur(8px)",
         }}
       />
@@ -1613,8 +1607,7 @@ function ProjectExperienceShowcase({ projectId }: { projectId: string }) {
   if (!config) return null;
 
   const active = config.stages[activeIndex] ?? config.stages[0];
-  const warm = projectId === "little-lemon";
-  const accent = warm ? "rgba(217,164,82,0.74)" : "var(--accent)";
+  const accent = pa(projectId, 0.74);
 
   return (
     <section
@@ -1626,9 +1619,7 @@ function ProjectExperienceShowcase({ projectId }: { projectId: string }) {
         zIndex: 2,
         padding: "var(--case-section-pad, 120px var(--gutter))",
         borderTop: "1px solid var(--rule)",
-        background: warm
-          ? "linear-gradient(180deg, var(--ink), rgba(34,25,15,0.62) 52%, var(--ink))"
-          : "linear-gradient(180deg, var(--ink), rgba(27,23,20,0.68) 52%, var(--ink))",
+        background: "linear-gradient(180deg, var(--ink), rgba(27,23,20,0.68) 52%, var(--ink))",
       }}
     >
       <div
@@ -1765,9 +1756,7 @@ function ProjectExperienceShowcase({ projectId }: { projectId: string }) {
               width: "100%",
               minWidth: 0,
               border: "1px solid var(--rule)",
-              background: warm
-                ? "linear-gradient(145deg, rgba(217,164,82,0.09), rgba(15,13,11,0.94))"
-                : "linear-gradient(145deg, rgba(200,65,43,0.09), rgba(15,13,11,0.94))",
+              background: `linear-gradient(145deg, ${pa(projectId, 0.09)}, rgba(15,13,11,0.94))`,
               overflow: "hidden",
             }}
           >
@@ -1887,8 +1876,7 @@ function InteractionStateVisual({
   activeIndex: number;
 }) {
   const active = config.steps[activeIndex];
-  const accent =
-    projectId === "little-lemon" ? "rgba(217,164,82,0.74)" : "var(--accent)";
+  const accent = pa(projectId, 0.74);
 
   return (
     <div
@@ -1898,10 +1886,7 @@ function InteractionStateVisual({
         minWidth: 0,
         minHeight: "var(--case-interaction-visual-height, 520px)",
         border: "1px solid var(--rule)",
-        background:
-          projectId === "little-lemon"
-            ? "linear-gradient(145deg, rgba(217,164,82,0.08), rgba(20,17,14,0.94))"
-            : "linear-gradient(145deg, rgba(200,65,43,0.10), rgba(20,17,14,0.94))",
+        background: `linear-gradient(145deg, ${pa(projectId, 0.09)}, rgba(20,17,14,0.94))`,
         padding: "var(--case-interaction-visual-pad, 34px)",
         position: "relative",
         overflow: "hidden",
@@ -1913,10 +1898,7 @@ function InteractionStateVisual({
           inset: "-28% auto auto 38%",
           width: "70%",
           height: "70%",
-          background:
-            projectId === "little-lemon"
-              ? "radial-gradient(circle, rgba(217,164,82,0.14), transparent 62%)"
-              : "radial-gradient(circle, rgba(200,65,43,0.16), transparent 62%)",
+          background: `radial-gradient(circle, ${pa(projectId, 0.15)}, transparent 62%)`,
           filter: "blur(12px)",
           opacity: 0.9,
         }}
@@ -2512,10 +2494,7 @@ export default function CaseStudy({ projectId }: Props) {
           inset: 0,
           zIndex: 1,
           pointerEvents: "none",
-          background:
-            projectId === "little-lemon"
-                ? "radial-gradient(ellipse 760px 580px at 88% 18%, rgba(217,164,82,0.08), transparent 58%)"
-                : "radial-gradient(ellipse 760px 580px at 88% 18%, rgba(200,65,43,0.10), transparent 58%)",
+          background: `radial-gradient(ellipse 760px 580px at 88% 18%, ${pa(projectId, 0.09)}, transparent 58%)`,
         }}
       />
 
@@ -2596,7 +2575,7 @@ export default function CaseStudy({ projectId }: Props) {
           <SmallCap>{p.timeframe}</SmallCap>
         </div>
 
-        <div style={{ maxWidth: "var(--max-w)", margin: "0 auto", width: "100%" }}>
+        <div className="case-hero-stage" style={{ maxWidth: "var(--max-w)", margin: "0 auto", width: "100%" }}>
           <div
             style={{
               display: "flex",
@@ -2614,7 +2593,7 @@ export default function CaseStudy({ projectId }: Props) {
               margin: 0,
               fontFamily: "var(--font-display)",
               fontWeight: 400,
-              fontSize: "clamp(72px, 12vw, 200px)",
+              fontSize: "var(--case-title-size, clamp(72px, 12vw, 200px))",
               lineHeight: 0.9,
               letterSpacing: "-0.03em",
               color: "var(--cream)",
@@ -2956,10 +2935,10 @@ export default function CaseStudy({ projectId }: Props) {
             }}
           >
             <FadeIn y={10}>
-              <SmallCap>End of case · {p.title}</SmallCap>
+              <SmallCap>Case study · {p.title}</SmallCap>
             </FadeIn>
             <FadeIn delay={90} y={10}>
-              <SmallCap>MMXXVI</SmallCap>
+              <SmallCap>{p.year}</SmallCap>
             </FadeIn>
           </div>
           <div

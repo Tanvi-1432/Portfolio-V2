@@ -12,6 +12,7 @@ import {
 import { useRouter, usePathname } from "next/navigation";
 import { gsap } from "@/lib/gsap";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import ProjectHeroMock from "@/components/mockups/ProjectHeroMock";
 
 interface TransitionState {
   active: boolean;
@@ -275,7 +276,7 @@ export function PageTransitionProvider({ children }: Props) {
                   fontFamily: "var(--font-display)",
                   fontStyle: "italic",
                   fontWeight: 400,
-                  fontSize: "clamp(72px, 11vw, 180px)",
+                  fontSize: "var(--transition-title-size, clamp(72px, 11vw, 180px))",
                   lineHeight: 0.9,
                   letterSpacing: "-0.035em",
                   color: "var(--cream)",
@@ -331,17 +332,21 @@ export function PageTransitionProvider({ children }: Props) {
                 background: "rgba(232,223,211,0.026)",
                 boxShadow: "0 28px 90px rgba(0,0,0,0.28)",
                 padding: 22,
-                minHeight: 330,
                 alignSelf: "center",
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
               }}
             >
+              {/* header row */}
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "baseline",
-                  paddingBottom: 18,
+                  paddingBottom: 14,
                   borderBottom: "1px solid var(--rule)",
+                  flexShrink: 0,
                 }}
               >
                 <span
@@ -353,7 +358,7 @@ export function PageTransitionProvider({ children }: Props) {
                     color: "var(--text-dim)",
                   }}
                 >
-                  {isReturnHome ? "Index frame" : "Selected system"}
+                  {isReturnHome ? "Portfolio" : state.title}
                 </span>
                 <span
                   style={{
@@ -367,96 +372,28 @@ export function PageTransitionProvider({ children }: Props) {
                 </span>
               </div>
 
-              <div style={{ display: "grid", gap: 12, marginTop: 22 }}>
-                {transitionProject.cues.map((cue, i) => (
-                  <div
-                    key={cue}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "34px 1fr",
-                      gap: 14,
-                      alignItems: "start",
-                    }}
-                  >
-                    <span
-                      style={{
-                        width: 30,
-                        height: 30,
-                        borderRadius: "50%",
-                        border: "1px solid rgba(232,223,211,0.2)",
-                        display: "grid",
-                        placeItems: "center",
-                        fontFamily: "var(--font-mono)",
-                        fontSize: 9,
-                        color: i === 0 ? "var(--accent)" : "var(--text-soft)",
-                      }}
-                    >
-                      0{i + 1}
-                    </span>
-                    <span>
-                      <span
-                        style={{
-                          display: "block",
-                          fontFamily: "var(--font-ui)",
-                          fontSize: 11,
-                          letterSpacing: "0.13em",
-                          textTransform: "uppercase",
-                          color: i === 0 ? "var(--cream)" : "var(--text-soft)",
-                          marginTop: 2,
-                        }}
-                      >
-                        {cue}
-                      </span>
-                      <span
-                        style={{
-                          display: "block",
-                          height: 1,
-                          marginTop: 10,
-                          background:
-                            i === 0
-                              ? "var(--accent)"
-                              : "rgba(232,223,211,0.2)",
-                          transformOrigin: "left center",
-                        }}
-                      />
-                    </span>
-                  </div>
-                ))}
-              </div>
-
+              {/* real project mock — position:relative container required by all mocks */}
               <div
                 style={{
-                  marginTop: 30,
-                  minHeight: 112,
-                  border: "1px solid rgba(232,223,211,0.14)",
-                  background:
-                    "linear-gradient(140deg, rgba(232,223,211,0.055), rgba(20,17,14,0.15))",
-                  display: "grid",
-                  alignContent: "end",
-                  gap: 10,
-                  padding: 16,
+                  position: "relative",
+                  height: 300,
+                  overflow: "hidden",
+                  flexShrink: 0,
                 }}
               >
-                <span
+                {!isReturnHome && <ProjectHeroMock id={state.id} thumbnail />}
+                {/* bottom fade so the clip looks intentional */}
+                <div
+                  aria-hidden="true"
                   style={{
-                    width: "62%",
-                    height: 5,
-                    borderRadius: 999,
-                    background: "var(--accent)",
-                  }}
-                />
-                <span
-                  style={{
-                    width: "86%",
-                    height: 1,
-                    background: "rgba(232,223,211,0.22)",
-                  }}
-                />
-                <span
-                  style={{
-                    width: "48%",
-                    height: 1,
-                    background: "rgba(232,223,211,0.16)",
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: 64,
+                    background:
+                      "linear-gradient(to bottom, transparent, var(--ink))",
+                    pointerEvents: "none",
                   }}
                 />
               </div>

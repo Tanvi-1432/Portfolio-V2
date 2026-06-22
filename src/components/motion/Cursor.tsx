@@ -11,7 +11,7 @@ export default function Cursor() {
   const visibleRef = useRef(false);
 
   useEffect(() => {
-    if (window.matchMedia("(hover: none)").matches) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
     let raf: number;
     let mx = -100, my = -100;

@@ -13,6 +13,7 @@ interface Props {
 export default function Contact({ active, onJump }: Props) {
   return (
     <section
+      className="scene-shell"
       id="contact"
       data-scene="contact"
       data-reveal-state={active ? "in" : "out"}
@@ -20,7 +21,8 @@ export default function Contact({ active, onJump }: Props) {
       style={{
         position: "relative",
         minHeight: "100vh",
-        background: "var(--ink)",
+        background:
+          "linear-gradient(180deg, rgba(17,14,12,0.98) 0%, var(--ink) 18%, #100d0b 100%)",
         color: "var(--cream)",
         padding: "var(--section-pad-lg) var(--gutter) var(--section-pad-xl)",
         overflow: "hidden",
@@ -41,6 +43,7 @@ export default function Contact({ active, onJump }: Props) {
         }}
       />
 
+      <h2 className="sr-only">Contact</h2>
       <div
         style={{
           position: "relative",
@@ -55,11 +58,13 @@ export default function Contact({ active, onJump }: Props) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "baseline",
-            marginBottom: 120,
+            marginBottom: 104,
+            paddingBottom: 18,
+            borderBottom: "1px solid var(--rule)",
           }}
         >
           <FadeIn>
-            <SmallCap color="var(--accent)">Contact · 06</SmallCap>
+            <SmallCap color="var(--accent)">Contact · 05</SmallCap>
           </FadeIn>
           <FadeIn delay={120}>
             <SmallCap>Open to roles · 2026</SmallCap>
@@ -94,7 +99,7 @@ export default function Contact({ active, onJump }: Props) {
             style={{
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
-              fontSize: "clamp(36px, 7vw, 120px)",
+              fontSize: "var(--contact-email-size, clamp(36px, 7vw, 120px))",
               lineHeight: 0.92,
               letterSpacing: "-0.035em",
               color: "var(--cream)",
@@ -191,7 +196,7 @@ export default function Contact({ active, onJump }: Props) {
         </FadeIn>
       </div>
 
-      {/* colophon */}
+      {/* footer */}
       <div
         style={{
           position: "relative",
@@ -199,33 +204,16 @@ export default function Contact({ active, onJump }: Props) {
           margin: "120px auto 0",
           width: "100%",
           display: "grid",
-          gridTemplateColumns: "1.2fr 1fr 1fr",
+          gridTemplateColumns: "1fr 1fr",
           gap: 40,
           paddingTop: 28,
           borderTop: "1px solid var(--rule)",
           color: "var(--text-soft)",
         }}
       >
-        <FadeIn delay={240}>
-          <div>
-            <SmallCap>Colophon</SmallCap>
-            <p
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: 14,
-                lineHeight: 1.6,
-                margin: "12px 0 0",
-                color: "var(--text-soft)",
-              }}
-            >
-              Set in Instrument Serif &amp; Newsreader. Built with Next.js,
-              deployed on Vercel.
-            </p>
-          </div>
-        </FadeIn>
         <FadeIn delay={300}>
           <div>
-            <SmallCap>Stack</SmallCap>
+            <SmallCap>Built with</SmallCap>
             <p
               style={{
                 fontFamily: "var(--font-body)",
@@ -235,7 +223,7 @@ export default function Contact({ active, onJump }: Props) {
                 color: "var(--text-soft)",
               }}
             >
-              Next.js 16 · TypeScript · CSS custom properties · GSAP · Lenis
+              Next.js · TypeScript · GSAP · Lenis · CSS custom properties
             </p>
           </div>
         </FadeIn>

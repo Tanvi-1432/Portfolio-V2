@@ -137,6 +137,23 @@
   }
 }
 
+@media (hover: none), (pointer: coarse) {
+  .motion-inspect:active {
+    transform: translateY(-2px) scale(0.992);
+  }
+}
+
+@media (max-width: 1024px) {
+  .transition-content {
+    grid-template-columns: 1fr;
+    max-width: min(760px, 100%);
+  }
+
+  .transition-preview {
+    display: none;
+  }
+}
+
 @media (max-width: 760px) {
   .transition-content {
     grid-template-columns: 1fr;
@@ -146,6 +163,7 @@
     display: none;
   }
 }
+
 
 /* Respect reduced-motion: reveal everything in place, no travel or fade. */
 @media (prefers-reduced-motion: reduce) {

@@ -200,6 +200,7 @@ export default function Hero({ onJump }: Props) {
   return (
     <section
       ref={sectionRef}
+      className="scene-shell"
       id="intro"
       data-scene="intro"
       data-reveal-state={revealed ? "in" : "out"}
@@ -207,7 +208,8 @@ export default function Hero({ onJump }: Props) {
       style={{
         position: "relative",
         minHeight: "100vh",
-        background: "var(--ink)",
+        background:
+          "linear-gradient(180deg, var(--ink) 0%, var(--ink) 78%, rgba(20,17,14,0.98) 100%)",
         color: "var(--cream)",
         overflow: "hidden",
         padding: "var(--chrome-safe-top) var(--gutter) var(--chrome-safe-bottom)",
@@ -275,6 +277,7 @@ export default function Hero({ onJump }: Props) {
           willChange: "transform",
         }}
       >
+        <div className="hero-stage">
         {/* byline */}
         <FadeIn delay={60}>
           <div
@@ -301,7 +304,7 @@ export default function Hero({ onJump }: Props) {
             margin: 0,
             fontFamily: "var(--font-display)",
             fontWeight: 400,
-            fontSize: "clamp(88px, 15vw, 250px)",
+            fontSize: "var(--hero-title-size, clamp(88px, 15vw, 250px))",
             lineHeight: 0.84,
             letterSpacing: "-0.035em",
             color: "var(--cream)",
@@ -331,8 +334,8 @@ export default function Hero({ onJump }: Props) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1.4fr 1fr",
-              gap: 64,
+              gridTemplateColumns: "var(--hero-standfirst-columns, 1.4fr 1fr)",
+              gap: "var(--hero-standfirst-gap, 64px)",
               marginTop: 48,
               alignItems: "end",
             }}
@@ -362,6 +365,7 @@ export default function Hero({ onJump }: Props) {
             </div>
           </div>
         </FadeIn>
+        </div>
       </div>
 
       {/* BOTTOM — parallax layer 3 (subtlest movement) */}
@@ -394,10 +398,7 @@ export default function Hero({ onJump }: Props) {
           </MagneticButton>
         </FadeIn>
         <FadeIn delay={360}>
-          <SmallCap>
-            Currently building{" "}
-            <span style={{ color: "var(--cream)" }}>PocketPlan</span>
-          </SmallCap>
+          <SmallCap>Open to roles &nbsp;·&nbsp; 2026</SmallCap>
         </FadeIn>
       </div>
     </section>

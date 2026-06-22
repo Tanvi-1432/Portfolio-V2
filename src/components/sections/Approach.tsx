@@ -114,6 +114,7 @@ const PRINCIPLES = [
 export default function Approach({ active }: Props) {
   return (
     <section
+      className="scene-shell"
       id="manifesto"
       data-scene="manifesto"
       data-reveal-state={active ? "in" : "out"}
@@ -121,7 +122,8 @@ export default function Approach({ active }: Props) {
       style={{
         position: "relative",
         minHeight: "100vh",
-        background: "var(--ink)",
+        background:
+          "linear-gradient(180deg, rgba(20,17,14,0.98) 0%, var(--ink) 14%, var(--ink) 86%, rgba(18,15,13,0.98) 100%)",
         color: "var(--text)",
         padding: "var(--section-pad-lg) var(--gutter) var(--section-pad-md)",
         overflow: "hidden",
@@ -134,7 +136,9 @@ export default function Approach({ active }: Props) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "baseline",
-            marginBottom: "var(--section-gap-md)",
+            marginBottom: "calc(var(--section-gap-md) - 8px)",
+            paddingBottom: 18,
+            borderBottom: "1px solid var(--rule)",
           }}
         >
           <FadeIn>
@@ -203,7 +207,7 @@ export default function Approach({ active }: Props) {
                 >
                   0{i + 1}
                 </div>
-                <h4
+                <h3
                   style={{
                     fontFamily: "var(--font-display)",
                     fontWeight: 400,
@@ -213,7 +217,7 @@ export default function Approach({ active }: Props) {
                   }}
                 >
                   <RevealText block delay={240 + i * 90}>{title}</RevealText>
-                </h4>
+                </h3>
                 <p
                   style={{
                     fontFamily: "var(--font-body)",

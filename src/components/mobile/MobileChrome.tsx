@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import SmallCap from "@/components/ui/SmallCap";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import { email } from "@/data/site";
 
 function TriggerMark({ open }: { open: boolean }) {
   const prefersReduced = usePrefersReducedMotion();
@@ -103,6 +104,7 @@ interface ChromeProps {
   setMenuOpen: (fn: (o: boolean) => boolean) => void;
   inCase: boolean;
   onCloseCase: () => void;
+  variant?: "mobile" | "tablet";
 }
 
 export function MChrome({
@@ -111,7 +113,10 @@ export function MChrome({
   setMenuOpen,
   inCase,
   onCloseCase,
+  variant = "mobile",
 }: ChromeProps) {
+  const isTablet = variant === "tablet";
+
   return (
     <header
       style={{
@@ -120,7 +125,7 @@ export function MChrome({
         left: 0,
         right: 0,
         zIndex: 140,
-        padding: "20px 22px",
+        padding: isTablet ? "24px 40px" : "20px 22px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -142,7 +147,7 @@ export function MChrome({
           style={{
             fontFamily: "var(--font-display)",
             fontStyle: "italic",
-            fontSize: 21,
+            fontSize: isTablet ? 24 : 21,
             lineHeight: 1,
             color: "#fff",
           }}
@@ -152,7 +157,7 @@ export function MChrome({
         <span
           style={{
             fontFamily: "var(--font-ui)",
-            fontSize: 9,
+            fontSize: isTablet ? 10 : 9,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
             color: "#fff",
@@ -177,7 +182,7 @@ export function MChrome({
           style={{
             pointerEvents: "auto",
             fontFamily: "var(--font-ui)",
-            fontSize: 10,
+            fontSize: isTablet ? 11 : 10,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
             color: "#fff",
@@ -199,7 +204,7 @@ export function MChrome({
           style={{
             pointerEvents: "auto",
             fontFamily: "var(--font-ui)",
-            fontSize: 10,
+            fontSize: isTablet ? 11 : 10,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
             color: menuOpen ? "var(--cream)" : "#fff",
@@ -222,6 +227,7 @@ interface MenuProps {
   currentScene: string;
   onJump: (id: string) => void;
   onClose: () => void;
+  variant?: "mobile" | "tablet";
 }
 
 export function MMenu({
@@ -229,24 +235,73 @@ export function MMenu({
   sections,
   currentScene,
   onJump,
+  onClose,
+  variant = "mobile",
 }: MenuProps) {
-  const email = "tanvirahman678@gmail.com";
   const prefersReduced = usePrefersReducedMotion();
+  const navRef = useRef<HTMLElement>(null);
+  const isTablet = variant === "tablet";
 
+  // Lock body scroll and manage inert + initial focus when open
   useEffect(() => {
+    const nav = navRef.current;
+    if (!nav) return;
     if (open) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
+      nav.removeAttribute("inert");
+      // Move focus to first nav button after the transition starts
+      const t = setTimeout(() => {
+        const first = nav.querySelector<HTMLElement>("button, a");
+        first?.focus();
+      }, 80);
       return () => {
+        clearTimeout(t);
         document.body.style.overflow = prev;
       };
+    } else {
+      nav.setAttribute("inert", "");
     }
   }, [open]);
 
+  // Escape to close + focus trap
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const nav = navRef.current;
+      if (!nav) return;
+      const focusable = Array.from(
+        nav.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
+        )
+      ).filter((el) => !el.closest("[inert]"));
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
   return (
     <nav
+      ref={navRef}
       aria-label="Site navigation"
       aria-hidden={!open}
+      // inert is set via ref so TypeScript doesn't need a custom declaration
       style={{
         position: "fixed",
         inset: 0,
@@ -260,7 +315,7 @@ export function MMenu({
         pointerEvents: open ? "auto" : "none",
         display: "flex",
         flexDirection: "column",
-        padding: "88px 22px 32px",
+        padding: isTablet ? "104px 40px 40px" : "88px 22px 32px",
         overflowY: "auto",
       }}
     >
@@ -277,14 +332,14 @@ export function MMenu({
         }}
       >
         <SmallCap color="var(--accent)">Navigation</SmallCap>
-        <SmallCap>MMXXVI</SmallCap>
+        <SmallCap>2026</SmallCap>
       </div>
 
       <ol
         style={{
           position: "relative",
           listStyle: "none",
-          margin: "5vh 0 0",
+          margin: isTablet ? "4vh 0 0" : "5vh 0 0",
           padding: 0,
           flex: "0 0 auto",
         }}
@@ -327,7 +382,7 @@ export function MMenu({
                   style={{
                     fontFamily: "var(--font-display)",
                     fontStyle: "italic",
-                    fontSize: "clamp(38px, 11vw, 56px)",
+                  fontSize: isTablet ? "clamp(46px, 7vw, 68px)" : "clamp(38px, 11vw, 56px)",
                     lineHeight: 1.02,
                     letterSpacing: "-0.02em",
                     color: activeS ? "var(--cream)" : "var(--text-soft)",
@@ -370,7 +425,7 @@ export function MMenu({
             margin: "12px 0 20px",
             fontFamily: "var(--font-display)",
             fontStyle: "italic",
-            fontSize: "clamp(20px, 6vw, 32px)",
+            fontSize: isTablet ? "clamp(30px, 4vw, 40px)" : "clamp(20px, 6vw, 32px)",
             lineHeight: 1,
             letterSpacing: "-0.02em",
             color: "var(--cream)",

@@ -92,6 +92,7 @@ export default function MobileApp() {
     >
       <MScrollProgress />
       <MChrome
+        variant="mobile"
         currentLabel={currentLabel}
         menuOpen={menuOpen}
         setMenuOpen={setMenuOpen}
@@ -99,6 +100,7 @@ export default function MobileApp() {
         onCloseCase={() => {}}
       />
       <MMenu
+        variant="mobile"
         open={menuOpen}
         sections={mobileNavSections}
         currentScene={currentScene}

@@ -65,7 +65,7 @@ function MScrambleWord({ text, italic, accentTail = false, startIndex = 0, total
   return (
     <span aria-hidden="true" style={{ display: "inline-block", whiteSpace: "nowrap", fontStyle: italic ? "italic" : "normal" }}>
       {chars.map((_, i) => (
-        <span key={i} ref={(el) => { refs.current[i] = el; }} style={{ display: "inline-block", minWidth: "0.52em", textAlign: "center", opacity: 0, color: accentTail && i === chars.length - 1 ? "var(--accent)" : "rgba(232,223,211,0.72)" }}>{" "}</span>
+        <span key={i} ref={(el) => { refs.current[i] = el; }} style={{ display: "inline-block", minWidth: "0.52em", textAlign: "center", opacity: 0.28, color: accentTail && i === chars.length - 1 ? "var(--accent)" : "rgba(232,223,211,0.72)" }}>{chars[i]}</span>
       ))}
     </span>
   );
@@ -78,14 +78,14 @@ export function MHero({ onJump }: { onJump: (id: string) => void }) {
   const line1 = "Creative", line2 = "Engineer", total = line1.length + line2.length;
 
   return (
-    <section id="intro" data-scene="intro" data-reveal-state={revealed ? "in" : "out"} aria-label="Introduction"
-      style={{ position: "relative", minHeight: "100svh", background: "var(--ink)", color: "var(--cream)", overflow: "hidden", padding: "92px 22px 30px", display: "flex", flexDirection: "column" }}>
+    <section className="scene-shell" id="intro" data-scene="intro" data-reveal-state={revealed ? "in" : "out"} aria-label="Introduction"
+      style={{ position: "relative", minHeight: "100svh", background: "linear-gradient(180deg, var(--ink) 0%, var(--ink) 78%, rgba(20,17,14,0.98) 100%)", color: "var(--cream)", overflow: "hidden", padding: "92px 22px 30px", display: "flex", flexDirection: "column" }}>
       <div aria-hidden="true" className="grain" />
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(ellipse 560px 520px at 110% 8%, rgba(200,65,43,0.16), transparent 60%)" }} />
 
       <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "baseline", paddingBottom: 14, borderBottom: "1px solid var(--rule)" }}>
         <FadeIn delay={700}><SmallCap color="var(--accent)">Frontend Engineer</SmallCap></FadeIn>
-        <FadeIn delay={820}><SmallCap>MMXXVI</SmallCap></FadeIn>
+        <FadeIn delay={820}><SmallCap>2026</SmallCap></FadeIn>
       </div>
 
       <div style={{ position: "relative", flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", paddingTop: 18 }}>
@@ -163,9 +163,9 @@ export function MApproach({ active }: { active: boolean }) {
   const total = M_TOKENS.length;
 
   return (
-    <section data-scene="manifesto" data-reveal-state={active ? "in" : "out"} aria-label="Approach"
-      style={{ position: "relative", background: "var(--ink)", color: "var(--text)", padding: "110px 22px 96px", overflow: "hidden" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 56 }}>
+    <section className="scene-shell" data-scene="manifesto" data-reveal-state={active ? "in" : "out"} aria-label="Approach"
+      style={{ position: "relative", background: "linear-gradient(180deg, rgba(20,17,14,0.98) 0%, var(--ink) 12%, var(--ink) 88%, rgba(18,15,13,0.98) 100%)", color: "var(--text)", padding: "104px 22px 96px", overflow: "hidden" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 52, paddingBottom: 14, borderBottom: "1px solid var(--rule)" }}>
         <FadeIn><SmallCap color="var(--accent)">Approach · 01</SmallCap></FadeIn>
         <FadeIn delay={120}><SmallCap>How I work</SmallCap></FadeIn>
       </div>
@@ -255,7 +255,7 @@ function MPocketPlanFeature({ onOpen }: { onOpen: (id: string, ev?: React.MouseE
     >
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 16 }}>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--accent)" }}>{p.no}</span>
-        <SmallCap>{p.role.split(" · ")[0]}</SmallCap>
+        <SmallCap>{p.category}</SmallCap>
       </div>
 
       <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 400, fontSize: "clamp(54px, 17vw, 82px)", lineHeight: 0.9, letterSpacing: "-0.035em", color: "var(--cream)", margin: "0 0 8px" }}>
@@ -291,8 +291,8 @@ function MPocketPlanFeature({ onOpen }: { onOpen: (id: string, ev?: React.MouseE
               data-pocket-slide
               style={{
                 position: "relative",
-                flex: "0 0 min(296px, calc(100vw - 44px))",
-                height: 578,
+                flex: "0 0 var(--m-pocket-slide-w, min(296px, calc(100vw - 44px)))",
+                height: "var(--m-pocket-slide-h, 578px)",
                 scrollSnapAlign: "center",
                 scrollSnapStop: "always",
                 opacity: prefersReduced || active ? 1 : 0.56,
@@ -400,7 +400,7 @@ function MProjectPreviewCard({
     >
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 16 }}>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--accent)" }}>{p.no}</span>
-        <SmallCap>{p.role.split(" · ")[0]}</SmallCap>
+        <SmallCap>{p.category}</SmallCap>
       </div>
 
       <div
@@ -540,8 +540,8 @@ function MProjectPreviewCard({
 
 export function MProjects({ active, onOpen }: { active: boolean; onOpen: (id: string, ev?: React.MouseEvent) => void }) {
   return (
-    <section data-scene="works" data-reveal-state={active ? "in" : "out"} aria-label="Projects"
-      style={{ position: "relative", background: "var(--ink)", color: "var(--text)", padding: "110px 22px 96px", overflow: "hidden" }}>
+    <section className="scene-shell" data-scene="works" data-reveal-state={active ? "in" : "out"} aria-label="Projects"
+      style={{ position: "relative", background: "linear-gradient(180deg, rgba(18,15,13,0.98) 0%, var(--ink) 7%, var(--ink) 92%, rgba(27,23,20,0.82) 100%)", color: "var(--text)", padding: "104px 22px 76px", overflow: "hidden" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 48, paddingBottom: 14, borderBottom: "1px solid var(--rule)" }}>
         <FadeIn><SmallCap color="var(--accent)">Projects · 02</SmallCap></FadeIn>
         <FadeIn delay={120}><SmallCap>2025–26</SmallCap></FadeIn>
@@ -582,9 +582,9 @@ export function MCapabilities({ active }: { active: boolean }) {
   const prefersReduced = usePrefersReducedMotion();
 
   return (
-    <section data-scene="capabilities" data-reveal-state={active ? "in" : "out"} aria-label="Capabilities"
-      style={{ position: "relative", background: "var(--ink-2)", color: "var(--text)", padding: "110px 22px 100px", overflow: "hidden" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14 }}>
+    <section className="scene-shell" data-scene="capabilities" data-reveal-state={active ? "in" : "out"} aria-label="Capabilities"
+      style={{ position: "relative", background: "linear-gradient(180deg, rgba(27,23,20,0.82) 0%, var(--ink-2) 12%, var(--ink-2) 88%, rgba(20,17,14,0.96) 100%)", color: "var(--text)", padding: "88px 22px 100px", overflow: "hidden" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14, paddingBottom: 14, borderBottom: "1px solid var(--rule)" }}>
         <FadeIn><SmallCap color="var(--accent)">Capabilities · 03</SmallCap></FadeIn>
         <FadeIn delay={120}><SmallCap>Six verbs</SmallCap></FadeIn>
       </div>
@@ -623,9 +623,9 @@ const FOCUS_ITEMS = [
 
 export function MAbout({ active }: { active: boolean }) {
   return (
-    <section data-scene="about" data-reveal-state={active ? "in" : "out"} aria-label="About"
-      style={{ position: "relative", background: "var(--ink)", color: "var(--text)", padding: "104px 22px 96px", overflow: "hidden" }}>
-      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 170, pointerEvents: "none", background: "linear-gradient(var(--ink-2), rgba(20,17,14,0))" }} />
+    <section className="scene-shell" data-scene="about" data-reveal-state={active ? "in" : "out"} aria-label="About"
+      style={{ position: "relative", background: "linear-gradient(180deg, rgba(20,17,14,0.96) 0%, var(--ink) 14%, var(--ink) 88%, rgba(17,14,12,0.98) 100%)", color: "var(--text)", padding: "104px 22px 96px", overflow: "hidden" }}>
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 170, pointerEvents: "none", background: "linear-gradient(rgba(20,17,14,0.96), rgba(20,17,14,0))" }} />
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(ellipse 560px 520px at 0% 32%, rgba(200,65,43,0.10), transparent 60%)" }} />
 
       <div style={{ position: "relative" }}>
@@ -679,12 +679,12 @@ export function MAbout({ active }: { active: boolean }) {
 // ── CONTACT ──────────────────────────────────────────────────────────────────
 export function MContact({ active, onJump }: { active: boolean; onJump: (id: string) => void }) {
   return (
-    <section data-scene="contact" data-reveal-state={active ? "in" : "out"} aria-label="Contact"
-      style={{ position: "relative", minHeight: "100svh", background: "var(--ink)", color: "var(--cream)", padding: "104px 22px 40px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
+    <section className="scene-shell" data-scene="contact" data-reveal-state={active ? "in" : "out"} aria-label="Contact"
+      style={{ position: "relative", minHeight: "100svh", background: "linear-gradient(180deg, rgba(17,14,12,0.98) 0%, var(--ink) 18%, #100d0b 100%)", color: "var(--cream)", padding: "104px 22px 40px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
       <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "radial-gradient(ellipse 620px 560px at 120% 120%, rgba(200,65,43,0.2), transparent 60%)" }} />
 
       <div style={{ position: "relative" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 52 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 52, paddingBottom: 14, borderBottom: "1px solid var(--rule)" }}>
           <FadeIn><SmallCap color="var(--accent)">Contact · 05</SmallCap></FadeIn>
           <FadeIn delay={120}><SmallCap>Open to roles · 2026</SmallCap></FadeIn>
         </div>
@@ -753,7 +753,7 @@ export function MContact({ active, onJump }: { active: boolean; onJump: (id: str
       </FadeIn>
 
       <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginTop: 36, paddingTop: 16, borderTop: "1px solid var(--rule)" }}>
-        <SmallCap style={{ maxWidth: 200, lineHeight: 1.6 }}>Built with Next.js · Vercel</SmallCap>
+        <SmallCap style={{ maxWidth: 240, lineHeight: 1.6 }}>Next.js · TypeScript · GSAP · Lenis</SmallCap>
         <button type="button" onClick={() => onJump("intro")} style={{ fontFamily: "var(--font-ui)", fontSize: 10, letterSpacing: "0.2em", textTransform: "uppercase", color: "var(--cream)", display: "inline-flex", alignItems: "center", gap: 9 }}>
           <span style={{ color: "var(--accent)" }}>↑</span> Top
         </button>

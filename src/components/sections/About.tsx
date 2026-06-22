@@ -8,9 +8,17 @@ interface Props {
   active: boolean;
 }
 
+const FOCUS_ITEMS = [
+  ["Frontend engineering", "Production React & TypeScript — typed, accessible, and fast on any device."],
+  ["Interaction & motion", "Motion systems and micro-interactions, choreographed not sprinkled."],
+  ["Product thinking", "Start from the decision someone is making; remove the rest."],
+  ["Design systems", "Tokens, components, and timing that keep a product coherent at scale."],
+] as const;
+
 export default function About({ active }: Props) {
   return (
     <section
+      className="scene-shell"
       id="about"
       data-scene="about"
       data-reveal-state={active ? "in" : "out"}
@@ -18,15 +26,14 @@ export default function About({ active }: Props) {
       style={{
         position: "relative",
         minHeight: "100vh",
-        background: "linear-gradient(to bottom, var(--ink) 0%, #1C1610 120px, #1A1510 100%)",
+        background:
+          "linear-gradient(180deg, rgba(20,17,14,0.96) 0%, var(--ink) 16%, var(--ink) 86%, rgba(17,14,12,0.98) 100%)",
         color: "var(--cream)",
         padding: "var(--section-pad-lg) var(--gutter) var(--section-pad-md)",
         overflow: "hidden",
       }}
     >
-      {/* warm grain — same dark-mode grain as rest of site */}
       <div aria-hidden="true" className="grain" />
-      {/* ambient glow — ties section to site's accent language */}
       <div
         aria-hidden="true"
         style={{
@@ -61,7 +68,7 @@ export default function About({ active }: Props) {
           </FadeIn>
           <FadeIn delay={120}>
             <SmallCap style={{ color: "var(--text-soft)" }}>
-              The engineer
+              How I build
             </SmallCap>
           </FadeIn>
         </div>
@@ -74,9 +81,9 @@ export default function About({ active }: Props) {
             alignItems: "start",
           }}
         >
-          {/* LEFT — craft/workbench artifact */}
+          {/* LEFT — interaction layer schematic */}
           <FadeIn delay={80}>
-            <figure style={{ margin: 0 }} aria-label="Interaction engineering workbench">
+            <figure style={{ margin: 0 }} aria-label="Interaction layer diagram">
               <div
                 style={{
                   width: "100%",
@@ -99,8 +106,8 @@ export default function About({ active }: Props) {
                     borderBottom: "1px solid var(--rule)",
                   }}
                 >
-                  <SmallCap color="var(--accent)">PocketPlan Layer</SmallCap>
-                  <SmallCap>State · Motion · UX</SmallCap>
+                  <SmallCap color="var(--accent)">Interaction Layer</SmallCap>
+                  <SmallCap>State · Motion · Feel</SmallCap>
                 </div>
 
                 <div
@@ -112,10 +119,10 @@ export default function About({ active }: Props) {
                   }}
                 >
                   {[
-                    ["01", "input state", "empty / focused / resolving / error"],
-                    ["02", "screen shift", "balance to forecast in 640ms"],
-                    ["03", "data feeling", "cash-flow line resolves before detail"],
-                    ["04", "fallback path", "same hierarchy with reduced motion"],
+                    ["01", "input state",      "empty → focused → resolving → error"],
+                    ["02", "state transition",  "content resolves before viewport shifts"],
+                    ["03", "feedback timing",   "motion responds before data is visible"],
+                    ["04", "reduced motion",    "same hierarchy, no movement"],
                   ].map(([n, label, detail]) => (
                     <div
                       key={n}
@@ -177,9 +184,9 @@ export default function About({ active }: Props) {
                   }}
                 >
                   {[
-                    ["3", "states"],
-                    ["0 CLS", "frame"],
+                    ["0 CLS", "layout shift"],
                     ["AA", "contrast"],
+                    ["✓", "reduced motion"],
                   ].map(([value, label]) => (
                     <div
                       key={label}
@@ -224,31 +231,37 @@ export default function About({ active }: Props) {
                   color: "var(--text-soft)",
                 }}
               >
-                A product-facing map of the layer I care about most: state, motion, accessibility, and feel.
+                The layer I care about most: state, motion, accessibility, and feel.
               </figcaption>
             </figure>
           </FadeIn>
 
-          {/* RIGHT — bio */}
+          {/* RIGHT — engineering focus */}
           <div>
-            {/* large opener */}
-            <div
+            <h2
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: "clamp(56px, 7vw, 120px)",
-                lineHeight: 0.88,
-                color: "var(--accent)",
-                marginBottom: 24,
-                letterSpacing: "-0.03em",
+                fontWeight: 400,
+                fontSize: "clamp(40px, 5.5vw, 88px)",
+                lineHeight: 0.94,
+                color: "var(--cream)",
+                margin: 0,
+                letterSpacing: "-0.025em",
               }}
             >
-              <RevealText block delay={120}>Building software</RevealText>
-              <RevealText block delay={220} style={{ color: "var(--cream)" }}>
-                at the seam.
+              <RevealText block delay={120}>
+                I build the{" "}
+                <em style={{ color: "var(--accent)" }}>front</em> of the
               </RevealText>
-            </div>
+              <RevealText block delay={220}>
+                product — the part people
+              </RevealText>
+              <RevealText block delay={320} style={{ color: "var(--text-soft)" }}>
+                actually touch.
+              </RevealText>
+            </h2>
 
-            <FadeIn delay={180}>
+            <FadeIn delay={200}>
               <p
                 style={{
                   fontFamily: "var(--font-body)",
@@ -259,56 +272,93 @@ export default function About({ active }: Props) {
                   maxWidth: 560,
                 }}
               >
-                I&apos;m a frontend engineer focused on the craft of interactive
-                products — where motion, engineering, and product thinking meet.
+                I&apos;m a frontend engineer focused on interaction. I care most
+                about the layer most teams treat as the finish — the transitions,
+                the latency, the empty states — because that&apos;s the layer a
+                person actually <em>feels</em>.
               </p>
             </FadeIn>
 
-            <FadeIn delay={260}>
+            <FadeIn delay={280}>
               <p
                 style={{
                   fontFamily: "var(--font-body)",
+                  fontStyle: "italic",
                   fontSize: 19,
-                  lineHeight: 1.6,
-                  color: "var(--text)",
-                  margin: "0 0 22px",
+                  lineHeight: 1.5,
+                  color: "var(--cream)",
+                  margin: "0 0 48px",
                   maxWidth: 560,
                 }}
               >
-                I build in React and TypeScript, with a motion system behind
-                every animation and a real component behind every UI. I care about
-                the details that don&apos;t show up in a diff: the easing on a
-                transition, the 80ms that makes an interface feel{" "}
-                <em>cheap</em>, the state you forgot to handle.
+                What excites me is making software feel alive — interfaces that
+                respond, anticipate, and reward attention.
               </p>
             </FadeIn>
 
+            {/* focus list */}
             <FadeIn delay={340}>
-              <p
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: 19,
-                  lineHeight: 1.6,
-                  color: "var(--text)",
-                  margin: "0 0 32px",
-                  maxWidth: 560,
-                }}
-              >
-                <em>PocketPlan</em> is where this came together: product decisions,
-                interface states, motion timing, accessibility, and the engineering
-                needed to make the whole thing hold.
-              </p>
+              <div style={{ borderTop: "1px solid var(--rule)" }}>
+                {FOCUS_ITEMS.map(([title, desc], i) => (
+                  <div
+                    key={title}
+                    style={{
+                      padding: "20px 0",
+                      borderBottom: "1px solid var(--rule)",
+                      display: "grid",
+                      gridTemplateColumns: "30px 1fr",
+                      gap: 16,
+                      alignItems: "baseline",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 11,
+                        color: "var(--accent)",
+                      }}
+                    >
+                      0{i + 1}
+                    </span>
+                    <div>
+                      <div
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontStyle: "italic",
+                          fontWeight: 400,
+                          fontSize: 22,
+                          color: "var(--cream)",
+                          marginBottom: 5,
+                        }}
+                      >
+                        {title}
+                      </div>
+                      <p
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          fontSize: 15,
+                          lineHeight: 1.5,
+                          color: "var(--text-soft)",
+                          margin: 0,
+                        }}
+                      >
+                        {desc}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </FadeIn>
 
             {/* facts table */}
-            <FadeIn delay={420}>
+            <FadeIn delay={440}>
               <dl
                 style={{
                   display: "grid",
                   gridTemplateColumns: "140px 1fr",
                   rowGap: 14,
                   columnGap: 24,
-                  margin: "48px 0 0",
+                  margin: "40px 0 0",
                   paddingTop: 32,
                   borderTop: "1px solid var(--rule)",
                   fontFamily: "var(--font-ui)",
@@ -324,24 +374,10 @@ export default function About({ active }: Props) {
                     fontSize: 11,
                   }}
                 >
-                  Now
-                </dt>
-                <dd style={{ margin: 0 }}>
-                  Software Engineering, final year. Building <em>PocketPlan</em>.
-                </dd>
-
-                <dt
-                  style={{
-                    letterSpacing: "0.18em",
-                    textTransform: "uppercase",
-                    color: "var(--text-soft)",
-                    fontSize: 11,
-                  }}
-                >
                   Stack
                 </dt>
                 <dd style={{ margin: 0 }}>
-                  React · TypeScript · Next.js · GSAP · accessibility
+                  React · TypeScript · Next.js · GSAP · Lenis
                 </dd>
 
                 <dt

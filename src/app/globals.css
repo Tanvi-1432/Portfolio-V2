@@ -40,12 +40,26 @@ body {
   display: none;
 }
 
+.tablet-chrome-only {
+  display: none;
+}
+
 .m-pocket-carousel {
   scrollbar-width: none;
 }
 
 .m-pocket-carousel::-webkit-scrollbar {
   display: none;
+}
+
+.scene-shell {
+  position: relative;
+  isolation: isolate;
+  scroll-margin-top: var(--chrome-safe-top);
+}
+
+.scene-shell[data-reveal-state] {
+  transition: background var(--dur-page) var(--ease-reveal);
 }
 
 .case-study {
@@ -56,10 +70,120 @@ body {
   --case-mock-height: 600px;
   --case-pocket-phone-card-h: 640px;
   --case-proof-panel-h: 620px;
+  --case-proof-panel-min-h: 620px;
+  --case-proof-inner-h: calc(var(--case-proof-panel-h) - (var(--case-proof-panel-pad, 36px) * 2));
   --case-proof-surface-h: 278px;
   --case-proof-surface-copy-h: 142px;
   --case-proof-decision-h: 164px;
   --case-proof-decision-copy-h: 104px;
+  --case-proof-panel-rows: auto var(--case-proof-surface-h) var(--case-proof-decision-h);
+  --case-proof-copy-overflow: hidden;
+  --case-proof-surface-overflow: hidden;
+  --case-title-size: clamp(72px, 12vw, 200px);
+  --transition-title-size: clamp(72px, 11vw, 180px);
+  --hero-title-size: clamp(88px, 15vw, 250px);
+  --hero-standfirst-columns: 1.4fr 1fr;
+  --hero-standfirst-gap: 64px;
+  --contact-email-size: clamp(36px, 7vw, 120px);
+  --project-spread-gap: 72px;
+}
+
+@media (min-width: 761px) and (max-width: 1024px) {
+  .desktop-chrome-only {
+    display: none;
+  }
+
+  .tablet-chrome-only {
+    display: block;
+  }
+
+  .case-study {
+    --case-hero-pad: 104px var(--gutter) 70px;
+    --case-section-pad: var(--section-pad-md) var(--gutter);
+    --case-close-pad: 96px var(--gutter) 110px;
+    --case-title-size: clamp(64px, 10vw, 116px);
+    --case-prose-columns: 1fr;
+    --case-prose-gap: 44px;
+    --case-product-columns: 1fr;
+    --case-system-grid: 1fr;
+    --case-system-row-offset: 0;
+    --case-system-node-pad: 0;
+    --case-pocket-state-columns: 1fr;
+    --case-pocket-state-gap: 54px;
+    --case-pocket-state-copy-top: auto;
+    --case-pocket-state-pad: 28px;
+    --case-pocket-state-button-columns: 88px minmax(0, 1fr) 20px;
+    --case-pocket-phone-card-w: min(350px, 46vw);
+    --case-pocket-phone-card-h: 640px;
+    --case-pocket-phone-gap: 24px;
+    --case-pocket-state-detail-columns: 0.46fr 1fr;
+    --case-experience-columns: 1fr;
+    --case-experience-gap: 54px;
+    --case-experience-stage-columns: 1fr;
+    --case-experience-visual-h: 500px;
+    --case-experience-pad: 30px;
+    --case-experience-button-columns: 84px minmax(0, 1fr) 18px;
+    --case-proof-header-columns: 1fr;
+    --case-proof-columns: 1fr;
+    --case-proof-gap: 34px;
+    --case-proof-panel-columns: 1fr;
+    --case-proof-panel-gap: 26px;
+    --case-proof-panel-h: auto;
+    --case-proof-panel-min-h: 700px;
+    --case-proof-inner-h: auto;
+    --case-proof-panel-rows: auto auto auto;
+    --case-proof-panel-pad: 30px;
+    --case-proof-surface-h: auto;
+    --case-proof-surface-min-h: 280px;
+    --case-proof-surface-copy-h: none;
+    --case-proof-decision-h: auto;
+    --case-proof-decision-copy-h: none;
+    --case-proof-node-shift: 0;
+    --case-proof-decision-columns: 150px 1fr;
+    --case-proof-copy-overflow: visible;
+    --case-proof-surface-overflow: visible;
+    --case-state-columns: 1fr 1fr;
+    --case-state-card-pad: 24px;
+    --case-card-columns: 1fr 1fr;
+    --case-interaction-header-columns: 1fr;
+    --case-interaction-columns: 1fr;
+    --case-interaction-detail-columns: 1fr;
+    --case-interaction-panel-height: auto;
+    --case-interaction-visual-height: auto;
+    --case-meta-columns: repeat(3, auto);
+    --case-metric-columns: repeat(2, minmax(0, 1fr));
+    --case-mock-height: 520px;
+    --project-spread-columns: 1fr;
+    --project-spread-gap: 46px;
+    --project-mock-height: 430px;
+    --project-text-pad-left: 0px;
+    --project-text-pad-right: 0px;
+    --transition-title-size: clamp(60px, 10vw, 104px);
+    --hero-title-size: clamp(92px, 14vw, 150px);
+    --hero-standfirst-columns: 1fr;
+    --hero-standfirst-gap: 28px;
+    --contact-email-size: clamp(42px, 7vw, 72px);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .desktop-experience {
+    display: none;
+  }
+
+  .mobile-experience {
+    display: block;
+  }
+
+  .case-study {
+    --case-hero-pad: 84px var(--gutter) 40px;
+    --case-title-size: clamp(54px, 13vw, 86px);
+    --transition-title-size: clamp(48px, 13vw, 76px);
+    --hero-title-size: clamp(54px, 15vw, 84px);
+    --hero-standfirst-columns: 1fr;
+    --hero-standfirst-gap: 24px;
+    --contact-email-size: clamp(28px, 8vw, 48px);
+  }
 }
 
 @media (max-width: 760px) {
@@ -103,14 +227,20 @@ body {
     --case-proof-gap: 28px;
     --case-proof-panel-columns: 1fr;
     --case-proof-panel-gap: 28px;
-    --case-proof-panel-h: 900px;
+    --case-proof-panel-h: auto;
+    --case-proof-panel-min-h: 760px;
+    --case-proof-inner-h: auto;
+    --case-proof-panel-rows: auto auto auto;
     --case-proof-panel-pad: 24px;
-    --case-proof-surface-h: 430px;
-    --case-proof-surface-copy-h: 236px;
-    --case-proof-decision-h: 320px;
-    --case-proof-decision-copy-h: 188px;
+    --case-proof-surface-h: auto;
+    --case-proof-surface-min-h: 330px;
+    --case-proof-surface-copy-h: none;
+    --case-proof-decision-h: auto;
+    --case-proof-decision-copy-h: none;
     --case-proof-node-shift: 0;
     --case-proof-decision-columns: 1fr;
+    --case-proof-copy-overflow: visible;
+    --case-proof-surface-overflow: visible;
     --case-state-columns: 1fr;
     --case-state-gap: 18px;
     --case-state-card-pad: 24px;
@@ -130,6 +260,17 @@ body {
     --case-metric-columns: 1fr 1fr;
     --case-close-columns: 1fr;
     --case-mock-height: 500px;
+    --case-title-size: clamp(58px, 18vw, 86px);
+    --transition-title-size: clamp(52px, 15vw, 76px);
+    --hero-title-size: clamp(54px, 16.5vw, 88px);
+    --hero-standfirst-columns: 1fr;
+    --hero-standfirst-gap: 24px;
+    --contact-email-size: clamp(24px, 7vw, 40px);
+  }
+
+  :root {
+    --m-pocket-slide-w: min(286px, calc(100vw - 50px));
+    --m-pocket-slide-h: 566px;
   }
 }
 
@@ -138,8 +279,32 @@ body {
     --case-meta-columns: 1fr;
     --case-metric-columns: 1fr;
     --case-mock-height: 440px;
-    --case-pocket-phone-card-w: min(292px, 84vw);
+    --case-pocket-phone-card-w: min(292px, 82vw);
     --case-pocket-phone-card-h: 560px;
+    --case-title-size: clamp(54px, 17vw, 76px);
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --m-pocket-slide-w: min(268px, calc(100vw - 58px));
+    --m-pocket-slide-h: 548px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .hero-stage,
+  .case-hero-stage,
+  .pocket-showcase-stage {
+    transform: translateX(-2.6vw);
+  }
+}
+
+@media (min-width: 2560px) {
+  .hero-stage,
+  .case-hero-stage,
+  .pocket-showcase-stage {
+    transform: translateX(-4.2vw);
   }
 }
 

@@ -10,8 +10,7 @@ export const navSections: NavSection[] = [
   { id: "works",        label: "Projects",     idx: "02" },
   { id: "capabilities", label: "Capabilities", idx: "03" },
   { id: "about",        label: "About",        idx: "04" },
-  { id: "index",        label: "Index",        idx: "05" },
-  { id: "contact",      label: "Contact",      idx: "06" },
+  { id: "contact",      label: "Contact",      idx: "05" },
 ];
 
 export const mobileNavSections: NavSection[] = [

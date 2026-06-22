@@ -27,6 +27,7 @@ export interface Project {
   tagline: string;
   year: string;
   role: string;
+  category: string;
   timeframe: string;
   stack: string[];
   accent: string;
@@ -51,6 +52,7 @@ export const projects: Record<string, Project> = {
     tagline: "A finance dashboard, engineered.",
     year: "2026",
     role: "Product · Frontend · TypeScript",
+    category: "Local-first product",
     timeframe: "Solo build",
     stack: ["React 19", "TypeScript", "Vite", "Tailwind CSS", "Zustand", "Recharts", "Framer Motion", "React Router"],
     accent: "#C8412B",
@@ -128,6 +130,7 @@ export const projects: Record<string, Project> = {
     tagline: "A sticky-note board, made capable.",
     year: "2025",
     role: "Frontend · Local-first",
+    category: "Frontend craft",
     timeframe: "Solo build",
     stack: ["React 18", "Vite", "TipTap", "Framer Motion", "IndexedDB", "date-fns", "nanoid", "Vitest"],
     accent: "#C8412B",
@@ -205,9 +208,10 @@ export const projects: Record<string, Project> = {
     tagline: "A restaurant, engineered.",
     year: "2025",
     role: "Frontend Developer",
+    category: "Accessible UI",
+    accent: "#D9A452",
     timeframe: "3 weeks · solo",
     stack: ["React", "TypeScript", "React Hook Form", "Zod", "CSS Grid", "Vite"],
-    accent: "#C8412B",
     summary:
       "A responsive restaurant platform with a real reservation flow and modern frontend architecture — a coursework brief I treated as a production product.",
     pull:
